@@ -1,0 +1,33 @@
+[
+  {
+    "userId": "61e82914a21b0dee706479e7",
+    "game": {
+      "name": "Catan",
+      "genre": ["Strategy", "Family"],
+      "typeOfGame": "Boardgame",
+      "numberOfPlayers": "1-4",
+      "forAge": "10+"
+    }
+  },
+  {
+    "userId": "61ea81b3199b1c1b4c50b3a0",
+    "game": {
+      "name": "Bohnanza",
+      "genre": ["Trading", "Family"],
+      "typeOfGame": "Cardgame",
+      "numberOfPlayers": "1-7",
+      "forAge": "8+"
+    }
+  },
+  {
+    "userId": "61ea81c1199b1c1b4c50b3a2",
+    "game": {
+      "name": "UNO",
+      "genre": ["Family"],
+      "typeOfGame": "Cardgame",
+      "numberOfPlayers": "2-10",
+      "forAge": "7+"
+    }
+  }
+]
+

@@ -1,4 +1,4 @@
-import mongoose, { ObjectId } from 'mongoose';
+import mongoose from 'mongoose';
 import crypto from 'crypto';
 
 const UserSchema = mongoose.Schema({
@@ -23,7 +23,6 @@ const UserSchema = mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'UserCollection',
   },
-  userAchievements: [],
 });
 
 const User = mongoose.model('User', UserSchema);

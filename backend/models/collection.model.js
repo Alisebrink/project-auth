@@ -1,30 +1,29 @@
 import mongoose from 'mongoose'
-import User from './user.model';
 
-
-const UserCollection = new.mongoose.Schema({
-    userId: User._id,
-    games: {
-    name: {
-        type: String,
-        required: true,
-        unique: true,
-      },
-      genre: {
+const UserCollection = mongoose.Schema({
+    userId: String,
+    game: {
+      name: {
         type: String,
         required: true,
       },
+      genre: [{
+        type: String,
+        required: true,
+      }],
       typeOfGame: {
         type: String,
         required: true,
       },
       numberOfPlayers: {
-        type: Number,
+        type: String,
       },
       forAge: {
-        type: Number,
-      },}
-      
+        type: String,
+      },
+      gameTime: {
+        type:String,
+      }}
     },
 )
 const Collection = mongoose.model('UserCollection', UserCollection);
