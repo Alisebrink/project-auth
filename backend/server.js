@@ -8,13 +8,10 @@ import User from './models/user.model';
 import UserCollection from './models/collection.model';
 import Role from './models/roles.model';
 
-// Importing data to be able to seed the database
-import collection from './data/collection.json';
-import roles from './data/roles.json';
-
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/alisebrinkFinalProject';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 mongoose.Promise = Promise;
 
 const port = process.env.PORT || 8080;
@@ -46,45 +43,40 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-// Fills the database with the data from my API
-const seedDatabase = async () => {
-  await UserCollection.deleteMany({});
-  await Role.deleteMany({});
-
-  collection.forEach((item) => {
-    const newCollection = new UserCollection(item);
-    newCollection.save();
-  });
-
-  roles.forEach((item) => {
-    const newRole = new Role(item);
-    newRole.save();
-  });
-};
-seedDatabase();
-console.log('Database has been reset');
-
 app.get('/', (req, res) => {
   res.send('Welcome to the API for my final project. This is a board game management system!');
 });
 
+// gets all games for the current user
 app.get('/game', authenticateUser, async (req, res) => {
   const games = await UserCollection.find({ userId: req.userId }).exec();
   // Borde hämta alla brädspel efter current userId
 
-  res.json(games.map((e) => e.game));
+  res.json(games.map((e) => e));
+});
+
+// Gets one boardgame
+app.get('/game/:id', authenticateUser, async (req, res) => {
+  const game = await UserCollection.findOne({ userId: req.userId, _id: req.params.id }).exec();
+
+  res.json(game);
 });
 
 // Create a game to your collection
 app.post('/game', authenticateUser, async (req, res) => {
-  const { genre, name, typeOfGame, numberOfPlayers, forAge } = req.body;
+  const { genre, name, typeOfGame, numberOfPlayers, gameTime, forAge } = req.body;
 
   try {
     const newGame = await new UserCollection({
       userId: req.userId,
       game: {
-        genre, name, typeOfGame, numberOfPlayers, forAge
-      }
+        genre,
+        name,
+        typeOfGame,
+        numberOfPlayers,
+        gameTime,
+        forAge,
+      },
     }).save();
     console.log(`You've added a boardgame to your collection`);
     // returns json, access token and user id
@@ -100,9 +92,47 @@ app.post('/game', authenticateUser, async (req, res) => {
   }
 });
 
-// /user/:id -> en för update -> en för delete -> en för get om man vill hämta ett specifikt
+// Delete one game
+app.delete('/game/:id', authenticateUser, async (req, res) => {
+  try {
+    await UserCollection.deleteOne({ userId: req.userId, _id: req.params.id }).exec();
+    console.log('Successfully deleted one game');
+    res.status(204).send();
+  } catch (error) {
+    res.status(400).json({
+      response: error,
+      success: false,
+    });
+  }
+});
 
-// /admin -> if (role === admin)
+// Update one game
+app.patch('/game/:id', authenticateUser, async (req, res) => {
+  const { id } = req.params;
+  const game = req.body;
+  try {
+    const updatedGame = await UserCollection.findByIdAndUpdate(
+      id,
+      { $set: { game: game } },
+      { new: true }
+    ).exec();
+    if (updatedGame) {
+      res.status(200).json({ response: updatedGame, sucess: true });
+      console.log('Sucessfully edited this game');
+    } else {
+      res.status(404).json({
+        message: 'Could not find game',
+        sucess: false,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      message: 'Invalid request',
+      response: error,
+      success: false,
+    });
+  }
+});
 
 app.post('/signup', async (req, res) => {
   const { username, password } = req.body;

@@ -7,10 +7,10 @@ const UserCollection = mongoose.Schema({
         type: String,
         required: true,
       },
-      genre: [{
+      genre: {
         type: String,
         required: true,
-      }],
+      },
       typeOfGame: {
         type: String,
         required: true,

@@ -1,32 +1,35 @@
 [
   {
-    "userId": "61e82914a21b0dee706479e7",
+    "userId": "61f7f07c4e7bfc6813f403c7",
     "game": {
       "name": "Catan",
-      "genre": ["Strategy", "Family"],
+      "genre": "Strategy",
       "typeOfGame": "Boardgame",
       "numberOfPlayers": "1-4",
-      "forAge": "10+"
+      "gameTime": "120",
+      "forAge": "10"
     }
   },
   {
-    "userId": "61ea81b3199b1c1b4c50b3a0",
+    "userId": "61f7f07c4e7bfc6813f403c7",
     "game": {
       "name": "Bohnanza",
-      "genre": ["Trading", "Family"],
+      "genre": "Trading",
       "typeOfGame": "Cardgame",
       "numberOfPlayers": "1-7",
-      "forAge": "8+"
+      "gameTime": "30",
+      "forAge": "8"
     }
   },
   {
-    "userId": "61ea81c1199b1c1b4c50b3a2",
+    "userId": "61f7f07c4e7bfc6813f403c7",
     "game": {
       "name": "UNO",
-      "genre": ["Family"],
+      "genre": "Family",
       "typeOfGame": "Cardgame",
       "numberOfPlayers": "2-10",
-      "forAge": "7+"
+      "gameTime": "20",
+      "forAge": "7"
     }
   }
 ]

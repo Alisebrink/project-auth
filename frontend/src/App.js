@@ -9,6 +9,7 @@ import Content from './components/Content';
 import Login from './components/Login';
 import NotFound from './components/NotFound';
 import LocalStorage from 'components/LocalStorage';
+import Game from 'components/Game'
 
 // Importing my reducer
 import user from './reducers/user';
@@ -28,6 +29,7 @@ export const App = () => {
         <Routes>
           <Route path="/" element={<Content/>}></Route>
           <Route path="/signin" element={<Login/>}></Route>
+          <Route path="/game/:id" element={<Game/>}></Route>
           <Route path="*" element={<NotFound/>}></Route>
         </Routes>
       </BrowserRouter>

@@ -6,7 +6,9 @@ const boardgame = createSlice({
     genre: null,
     name: null,
     typeOfGame: null,
+    numberOfPlayers: null,
     forAge: null,
+    gameTime: null,
   },
   reducers: {
     setGenre: (store, action) => {
@@ -18,12 +20,18 @@ const boardgame = createSlice({
     setTypeOfGame: (store, action) => {
       store.typeOfGame = action.payload;
     },
+    setNumberOfPlayers: (store, action) => {
+      store.numberOfPlayers = action.payload;
+    },
     setForAge: (store, action) => {
       store.forAge = action.payload;
     },
+    setGameTime: (store, action) => {
+      store.gameTime = action.payload;
+    },
     setError: (store, action) => {
-        store.errors = action.payload;
-    }
+      store.errors = action.payload;
+    },
   },
 });
 

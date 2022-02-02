@@ -4,27 +4,27 @@ import { useDispatch, batch, useSelector } from 'react-redux';
 import { API_URL } from '../utils/urls';
 import collection from '../reducers/collection';
 
-const Collection = () => {
+const Collection = ({ setAddNewGame }) => {
   const [genre, setGenre] = useState('');
   const [name, setName] = useState('');
   const [typeOfGame, setTypeOfGame] = useState('');
-  const [forAge, setForAge] = useState('');
+  const [forAge, setForAge] = useState('0');
+  const [gameTime, setGameTime] = useState('0');
+  const [numberOfPlayers, setNumberOfPlayers] = useState('');
 
   const accessToken = useSelector((store) => store.user.accessToken);
 
   const dispatch = useDispatch();
   // const errors = useSelector((store) => store.user.error);
 
-  const onFormSubmit = (event) => {
-    event.preventDefault();
-
+  const onFormSubmit = () => {
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'accessToken': accessToken
+        accessToken: accessToken,
       },
-      body: JSON.stringify({ genre, name, typeOfGame, forAge }),
+      body: JSON.stringify({ genre, name, typeOfGame, gameTime, numberOfPlayers, forAge }),
     };
 
     fetch(API_URL('game'), options)
@@ -36,6 +36,8 @@ const Collection = () => {
             dispatch(collection.actions.setName(data.response.name));
             dispatch(collection.actions.setTypeOfGame(data.response.typeOfGame));
             dispatch(collection.actions.setForAge(data.response.forAge));
+            dispatch(collection.actions.setNumberOfPlayers(data.response.numberOfPlayers));
+            dispatch(collection.actions.setGameTime(data.response.gameTime));
             dispatch(collection.actions.setError(null));
           });
         } else {
@@ -43,6 +45,8 @@ const Collection = () => {
           dispatch(collection.actions.setName(null));
           dispatch(collection.actions.setTypeOfGame(null));
           dispatch(collection.actions.setForAge(null));
+          dispatch(collection.actions.setNumberOfPlayers(null));
+          dispatch(collection.actions.setGameTime(null));
           dispatch(collection.actions.setError(data.response));
         }
       });
@@ -51,29 +55,70 @@ const Collection = () => {
   return (
     <main>
       <form onSubmit={onFormSubmit}>
-        <label htmlFor="gamename">Game name </label>
-        <input id="gamename" type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        <label htmlFor="gamename">Game name: </label>
+        <input
+          id="gamename"
+          name="gamename"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
         <label htmlFor="genre">Genre of game:</label>
-        <input id="genre" type="text" value={genre} onChange={(e) => setGenre(e.target.value)} />
-        <label htmlFor="typeofgame">Type of game:</label>
-        <select
-          id="typeofgame"
-          name="typeofgame"
-          value={typeOfGame}
-          onChange={(e) => {console.log(e); setTypeOfGame(e.target.value);}}
-        >
-          <option disable="true">Please choose</option>
-          <option value="boardgame">Boardgame</option>
-          <option value="cardgame">Cardgame</option>
+        <select id="genre" name="genre" onChange={(e) => setGenre(e.target.value)}>
+          <option disable="true">Choose genre</option>
+          <option value="Party game">Party game</option>
+          <option value="Family game">Family game</option>
+          <option value="Strategy">Strategy</option>
+          <option value="Strategy">Cooperative strategy</option>
         </select>
-        <label htmlFor="forage">For ages:</label>
+
+        <label htmlFor="typeofgame">Type of game: </label>
+        <select id="typeofgame" name="typeofgame" onChange={(e) => setTypeOfGame(e.target.value)}>
+          <option disable="true">Select type</option>
+          <option value="Abstract">Abstract</option>
+          <option value="Area control">Area control</option>
+          <option value="Campaign/Legacy">Campaign/Legacy</option>
+          <option value="Deckbuilder">Deckbuilder</option>
+          <option value="Deck construction">Deck construction</option>
+          <option value="Dexterity">Dexterity</option>
+          <option value="Drafting">Drafting</option>
+          <option value="Dungeon crawler">Dungeon crawler</option>
+          <option value="Engine builder">Engine builder</option>
+          <option value="Push-your-luck">Push-your-luck</option>
+          <option value="Roll-and-move">Roll-and-move</option>
+          <option value="Push-your-write">Push-your-write</option>
+          <option value="Social deduction">Social deduction</option>
+          <option value="Storytelling">Storytelling</option>
+          <option value="Worker placement">Worker placement</option>
+          <option value="Wargame">Wargame</option>
+        </select>
+        <label htmlFor="forage">For ages {forAge} and up:</label>
         <input
           id="forage"
+          name="forage"
           type="number"
           value={forAge}
           onChange={(e) => setForAge(e.target.value)}
         />
-        <button type="submit">Add game</button>
+        <label htmlFor="gametime">Estimated gametime:</label>
+        <input
+          id="gametime"
+          name="gametime"
+          type="number"
+          value={gameTime}
+          onChange={(e) => setGameTime(e.target.value)}
+        />
+        <label htmlFor="numberofplayers">Number of players:</label>
+        <input
+          id="numberofplayers"
+          name="numberofplayers"
+          type="text"
+          value={numberOfPlayers}
+          onChange={(e) => setNumberOfPlayers(e.target.value)}
+        />
+        <button onClick={() => setAddNewGame('false')} type="submit">
+          Add game
+        </button>
       </form>
     </main>
   );

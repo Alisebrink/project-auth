@@ -8,7 +8,7 @@ import user from '../reducers/user';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [mode, setMode] = useState('signup');
+  const [mode, setMode] = useState('signin');
 
   const accessToken = useSelector((store) => store.user.accessToken);
 
@@ -85,15 +85,29 @@ const Login = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <label htmlFor="password">Password: {errors && <p className="warning-login">Please enter a password!</p>}</label>
+        <label htmlFor="password">
+          Password: {errors && <p className="warning-login">Please enter a password!</p>}
+        </label>
         <input
           id="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {mode === 'signup' ? <button disabled={username.length < 5} className="login" type="submit">Create user</button> : <button disabled={username.length < 5} className="login" type="submit">Login</button>}
-        {username.length < 5 ? <p className="warning">Your username needs to be longer than 5 characters!</p> : <p></p>}
+        {mode === 'signup' ? (
+          <button disabled={username.length < 5} className="login" type="submit">
+            Create user
+          </button>
+        ) : (
+          <button disabled={username.length < 5} className="login" type="submit">
+            Login
+          </button>
+        )}
+        {username.length < 5 ? (
+          <p className="warning">Your username needs to be longer than 5 characters!</p>
+        ) : (
+          <p></p>
+        )}
       </form>
     </main>
   );
