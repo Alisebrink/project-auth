@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components'
 
 const StyledFooter = styled.footer `
-background:#FFBC80;
-color:black;
+background:#96CEB4;
+color:white;
 bottom:0;
-position:absolute;
+position:fixed;
 width:100%;
 text-align:center;
 padding:5px;

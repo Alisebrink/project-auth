@@ -21,11 +21,14 @@ import Header from 'components/Header';
 
 const MainContainer = styled.main`
   margin: auto auto;
-  max-width: 992px;
-  min-height: 600px;
-  height: 100%;
+  width:100vh;
+  height: 100vh;
   display:flex;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+   
+  @media (min-width:599px) {
+    height:70vh;
+  }
 `;
 
 const reducer = combineReducers({

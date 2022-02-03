@@ -3,7 +3,7 @@ import { useDispatch, batch, useSelector } from 'react-redux';
 
 import { API_URL } from '../utils/urls';
 import collection from '../reducers/collection';
-import { Form, FormInput, FormLabel, FormButton } from './elements/form';
+import { AddNewForm, FormInput, FormLabel, FormButton, FormSelect } from './elements/form';
 
 const Collection = ({ setAddNewGame }) => {
   const [genre, setGenre] = useState('');
@@ -55,8 +55,8 @@ const Collection = ({ setAddNewGame }) => {
 
   return (
     <div>
-      <Form onSubmit={onFormSubmit}>
-        <FormLabel htmlFor="gamename">Game name: </FormLabel>
+      <AddNewForm onSubmit={onFormSubmit}>
+        <FormLabel htmlFor="gamename">Name</FormLabel>
         <FormInput
           id="gamename"
           name="gamename"
@@ -64,17 +64,17 @@ const Collection = ({ setAddNewGame }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <FormLabel htmlFor="genre">Genre of game:</FormLabel>
-        <select id="genre" name="genre" onChange={(e) => setGenre(e.target.value)}>
+        <FormLabel htmlFor="genre">Genre</FormLabel>
+        <FormSelect id="genre" name="genre" onChange={(e) => setGenre(e.target.value)}>
           <option disable="true">Choose genre</option>
           <option value="Party game">Party game</option>
           <option value="Family game">Family game</option>
           <option value="Strategy">Strategy</option>
           <option value="Strategy">Cooperative strategy</option>
-        </select>
+        </FormSelect>
 
-        <FormLabel htmlFor="typeofgame">Type of game: </FormLabel>
-        <select id="typeofgame" name="typeofgame" onChange={(e) => setTypeOfGame(e.target.value)}>
+        <FormLabel htmlFor="typeofgame">Type of game</FormLabel>
+        <FormSelect id="typeofgame" name="typeofgame" onChange={(e) => setTypeOfGame(e.target.value)}>
           <option disable="true">Select type</option>
           <option value="Abstract">Abstract</option>
           <option value="Area control">Area control</option>
@@ -92,8 +92,8 @@ const Collection = ({ setAddNewGame }) => {
           <option value="Storytelling">Storytelling</option>
           <option value="Worker placement">Worker placement</option>
           <option value="Wargame">Wargame</option>
-        </select>
-        <FormLabel htmlFor="forage">For ages {forAge} and up:</FormLabel>
+        </FormSelect>
+        <FormLabel htmlFor="forage">For ages</FormLabel>
         <FormInput
           id="forage"
           name="forage"
@@ -101,7 +101,7 @@ const Collection = ({ setAddNewGame }) => {
           value={forAge}
           onChange={(e) => setForAge(e.target.value)}
         />
-        <FormLabel htmlFor="gametime">Estimated gametime:</FormLabel>
+        <FormLabel htmlFor="gametime">Estimated gametime (minutes)</FormLabel>
         <FormInput
           id="gametime"
           name="gametime"
@@ -109,7 +109,7 @@ const Collection = ({ setAddNewGame }) => {
           value={gameTime}
           onChange={(e) => setGameTime(e.target.value)}
         />
-        <FormLabel htmlFor="numberofplayers">Number of players:</FormLabel>
+        <FormLabel htmlFor="numberofplayers">Number of players</FormLabel>
         <FormInput
           id="numberofplayers"
           name="numberofplayers"
@@ -117,13 +117,14 @@ const Collection = ({ setAddNewGame }) => {
           value={numberOfPlayers}
           onChange={(e) => setNumberOfPlayers(e.target.value)}
         />
-        <FormButton onClick={() => setAddNewGame('false')} type="submit">
+        <div><FormButton className="no-margin-left" onClick={() => setAddNewGame('false')} type="submit">
           Add game
         </FormButton>
         <FormButton onClick={() => setAddNewGame('false')}>
           Go back
-        </FormButton>
-      </Form>
+        </FormButton></div>
+        
+      </AddNewForm>
     </div>
   );
 };

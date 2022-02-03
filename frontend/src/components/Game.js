@@ -5,7 +5,8 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, batch } from 'react-redux';
 import collection from '../reducers/collection';
 import { Logout, MainWindow, TopTextBox } from './elements/general-styling';
-import { Form, FormLabel, FormInput, FormButton } from './elements/form';
+import { EditForm, FormLabel, FormInput, FormButton, FormSelect } from './elements/form';
+import { ShowOneGame, OneGameText } from './elements/games';
 import user from '../reducers/user';
 
 import gloomhaven from '../assets/gloomhaven.png';
@@ -127,104 +128,105 @@ const Game = () => {
               <Link to="/">Go back</Link>
             </div>
           ) : (
-            <div>
+            <ShowOneGame>
               <img src={gloomhaven} alt={gloomhaven} />
-              <h2>{oneGame?.game?.name}</h2>
-              <p>Genre: {oneGame?.game?.genre}</p>
-              <p>Type of game:{oneGame?.game?.typeOfGame}</p>
-              <p>Number of players: {oneGame?.game?.numberOfPlayers}</p>
-              <p>For ages: {oneGame?.game?.forAge} +</p>
-              <p>Estimated playtime: {oneGame?.game?.gameTime} minutes</p>
-              <FormButton onClick={deleteGame}>Delete</FormButton>
-              <FormButton onClick={() => setEditGame('true')}>Edit</FormButton>
-              <FormButton onClick={() => navigate('/')}>Go back</FormButton>
-            </div>
+              <OneGameText>
+                <h2>{oneGame?.game?.name}</h2>
+                <p>Genre: {oneGame?.game?.genre}</p>
+                <p>Type of game:{oneGame?.game?.typeOfGame}</p>
+                <p>Number of players: {oneGame?.game?.numberOfPlayers}</p>
+                <p>For ages: {oneGame?.game?.forAge} +</p>
+                <p>Estimated playtime: {oneGame?.game?.gameTime} minutes</p>
+                <div>
+                  <FormButton className="no-margin-left" onClick={deleteGame}>Delete</FormButton>
+                  <FormButton onClick={() => setEditGame('true')}>Edit</FormButton>
+                  <FormButton onClick={() => navigate('/')}>Go back</FormButton>
+                </div>
+              </OneGameText>
+            </ShowOneGame>
           )}
         </div>
       ) : (
-        <>
-          <div>
-            <h2>{oneGame?.game?.name}</h2>
-            <p>Genre: {oneGame?.game?.genre}</p>
-            <p>Type of game:{oneGame?.game?.typeOfGame}</p>
-            <p>Number of players: {oneGame?.game?.numberOfPlayers}</p>
-            <p>For ages: {oneGame?.game?.forAge} +</p>
-            <p>Estimated playtime: {oneGame?.game?.gameTime} minutes</p>
-          </div>
-          <Form onSubmit={updateGame}>
-            <FormLabel htmlFor="gamename" placeholder={name}>
-              Game name:{' '}
-            </FormLabel>
-            <FormInput
-              id="gamename"
-              name="gamename"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <FormLabel htmlFor="genre">Genre of game:</FormLabel>
-            <select id="genre" name="genre" onChange={(e) => setGenre(e.target.value)}>
-              <option disable="true">Choose genre</option>
-              <option value="Party game">Party game</option>
-              <option value="Family game">Family game</option>
-              <option value="Strategy">Strategy</option>
-              <option value="Cooperative strategy">Cooperative strategy</option>
-            </select>
+        <ShowOneGame>
+          <img src={gloomhaven} alt={gloomhaven} />
+          <OneGameText>
+            <EditForm onSubmit={updateGame}>
+              <FormLabel htmlFor="gamename" placeholder={name}>
+                Name
+              </FormLabel>
+              <FormInput
+                id="gamename"
+                name="gamename"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <FormLabel htmlFor="genre">Genre</FormLabel>
+              <FormSelect id="genre" name="genre" onChange={(e) => setGenre(e.target.value)}>
+                <option disable="true">Choose genre</option>
+                <option value="Party game">Party game</option>
+                <option value="Family game">Family game</option>
+                <option value="Strategy">Strategy</option>
+                <option value="Cooperative strategy">Cooperative strategy</option>
+              </FormSelect>
 
-            <FormLabel htmlFor="typeofgame">Type of game: </FormLabel>
-            <select
-              id="typeofgame"
-              name="typeofgame"
-              onChange={(e) => setTypeOfGame(e.target.value)}
-            >
-              <option disable="true">Select type</option>
-              <option value="Abstract">Abstract</option>
-              <option value="Area control">Area control</option>
-              <option value="Campaign/Legacy">Campaign/Legacy</option>
-              <option value="Deckbuilder">Deckbuilder</option>
-              <option value="Deck construction">Deck construction</option>
-              <option value="Dexterity">Dexterity</option>
-              <option value="Drafting">Drafting</option>
-              <option value="Dungeon crawler">Dungeon crawler</option>
-              <option value="Engine builder">Engine builder</option>
-              <option value="Push-your-luck">Push-your-luck</option>
-              <option value="Roll-and-move">Roll-and-move</option>
-              <option value="Push-your-write">Push-your-write</option>
-              <option value="Social deduction">Social deduction</option>
-              <option value="Storytelling">Storytelling</option>
-              <option value="Worker placement">Worker placement</option>
-              <option value="Wargame">Wargame</option>
-            </select>
-            <FormLabel htmlFor="forage">For ages {forAge} and up:</FormLabel>
-            <FormInput
-              id="forage"
-              name="forage"
-              type="number"
-              value={forAge}
-              onChange={(e) => setForAge(e.target.value)}
-            />
-            <FormLabel htmlFor="gametime">Estimated gametime:</FormLabel>
-            <FormInput
-              id="gametime"
-              name="gametime"
-              type="number"
-              value={gameTime}
-              onChange={(e) => setGameTime(e.target.value)}
-            />
-            <FormLabel htmlFor="numberofplayers">Number of players:</FormLabel>
-            <FormInput
-              id="numberofplayers"
-              name="numberofplayers"
-              type="text"
-              value={numberOfPlayers}
-              onChange={(e) => setNumberOfPlayers(e.target.value)}
-            />
-            <FormButton onClick={() => setEditGame('true')} type="submit">
-              Update game
-            </FormButton>
-            <FormButton onClick={() => navigate(`/game/${id}`)}>Go back</FormButton>
-          </Form>
-        </>
+              <FormLabel htmlFor="typeofgame">Type of game </FormLabel>
+              <FormSelect
+                id="typeofgame"
+                name="typeofgame"
+                onChange={(e) => setTypeOfGame(e.target.value)}
+              >
+                <option disable="true">Select type</option>
+                <option value="Abstract">Abstract</option>
+                <option value="Area control">Area control</option>
+                <option value="Campaign/Legacy">Campaign/Legacy</option>
+                <option value="Deckbuilder">Deckbuilder</option>
+                <option value="Deck construction">Deck construction</option>
+                <option value="Dexterity">Dexterity</option>
+                <option value="Drafting">Drafting</option>
+                <option value="Dungeon crawler">Dungeon crawler</option>
+                <option value="Engine builder">Engine builder</option>
+                <option value="Push-your-luck">Push-your-luck</option>
+                <option value="Roll-and-move">Roll-and-move</option>
+                <option value="Push-your-write">Push-your-write</option>
+                <option value="Social deduction">Social deduction</option>
+                <option value="Storytelling">Storytelling</option>
+                <option value="Worker placement">Worker placement</option>
+                <option value="Wargame">Wargame</option>
+              </FormSelect>
+              <FormLabel htmlFor="forage">For ages</FormLabel>
+              <FormInput
+                id="forage"
+                name="forage"
+                type="number"
+                value={forAge}
+                onChange={(e) => setForAge(e.target.value)}
+              />
+              <FormLabel htmlFor="gametime">Estimated gametime (minutes)</FormLabel>
+              <FormInput
+                id="gametime"
+                name="gametime"
+                type="number"
+                value={gameTime}
+                onChange={(e) => setGameTime(e.target.value)}
+              />
+              <FormLabel htmlFor="numberofplayers">Number of players</FormLabel>
+              <FormInput
+                id="numberofplayers"
+                name="numberofplayers"
+                type="text"
+                value={numberOfPlayers}
+                onChange={(e) => setNumberOfPlayers(e.target.value)}
+              />
+              <div>
+                <FormButton className="no-margin-left" onClick={() => setEditGame('true')} type="submit">
+                  Update game
+                </FormButton>
+                <FormButton onClick={() => navigate(`/game/${id}`)}>Go back</FormButton>
+              </div>
+            </EditForm>
+          </OneGameText>
+        </ShowOneGame>
       )}
     </MainWindow>
   );

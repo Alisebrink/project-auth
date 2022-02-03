@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../utils/urls';
 import user from '../reducers/user';
 
-import { Form, FormLabel, FormInput, FormButton } from './elements/form'
+import { LoginForm, FormLabel, FormInput, FormButton } from './elements/form'
 import { MainWindow, TopTextBox, Warning, TextLink } from './elements/general-styling';
 
 const Login = () => {
@@ -60,7 +60,7 @@ const Login = () => {
       <TopTextBox>{mode === 'signin' ? <h1>Login</h1> : <h1>Create user</h1>}</TopTextBox>
       {mode === 'signup' ? (
         <div>
-          <Form onSubmit={onFormSubmit}>
+          <LoginForm onSubmit={onFormSubmit}>
             <FormLabel htmlFor="username">Username</FormLabel>
             <FormInput
               id="username"
@@ -86,7 +86,7 @@ const Login = () => {
             ) : (
               <p></p>
             )}
-          </Form>
+          </LoginForm>
 
           <p>
             Already have a user?&nbsp;
@@ -95,8 +95,9 @@ const Login = () => {
         </div>
       ) : (
         <div>
-          <Form onSubmit={onFormSubmit}>
+          <LoginForm onSubmit={onFormSubmit}>
             <FormLabel htmlFor="username">Username</FormLabel>
+            <p>{errors && <Warning>Please enter a username!</Warning>}</p>
             <FormInput
               id="username"
               type="text"
@@ -104,8 +105,9 @@ const Login = () => {
               onChange={(e) => setUsername(e.target.value)}
             />
             <FormLabel htmlFor="password">
-              Password {errors && <Warning>Please enter a password!</Warning>}
+              Password 
             </FormLabel>
+            <p>{errors && <Warning>Please enter a password!</Warning>}</p>
             <FormInput
               id="password"
               type="password"
@@ -120,7 +122,7 @@ const Login = () => {
             ) : (
               <p></p>
             )}
-          </Form>
+          </LoginForm>
           <p>
             Don't have a user?&nbsp;
             <TextLink onClick={() => setMode('signup')}>Create one here</TextLink>

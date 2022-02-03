@@ -11,7 +11,7 @@ body {
     position: relative;
     min-height: 100vh;
     width:100%;
-    background:#eeeeec;
+    background:#EFEBDD;
 }
 
 #root {
@@ -24,5 +24,14 @@ body {
 }
 
 img {
-    width:200px;
+    width:100%;
+}
+
+.no-margin-left {
+    margin-left:0 !important;
+}
+
+
+.login {
+    margin:0 !important;
 }

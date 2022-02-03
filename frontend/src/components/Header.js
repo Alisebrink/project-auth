@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledHeader = styled.header`
-  background: #ffbc80;
-  color: black;
+  background: #96CEB4;
+  color: white;
   top: 0;
-  position: absolute;
+  position: fixed;
   width: 100%;
   text-align: center;
   padding: 5px;
