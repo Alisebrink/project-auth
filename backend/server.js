@@ -134,6 +134,30 @@ app.patch('/game/:id', authenticateUser, async (req, res) => {
   }
 });
 
+// endpoint to be able to search the database by name on boardgames
+app.get('/game/search/:id', authenticateUser, async (req, res) => {
+  const { name } = req.query;
+  try {
+    const foundGames = await UserCollection.find({
+      name: RegExp(name, 'i'),
+    });
+    if (foundGames.length >= 1) {
+      res.status(201).json({
+        response: foundGames,
+        success: true,
+      });
+    } else {
+      res.status(404).json({
+        response: 'No games found',
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
+  }
+});
+
+// endpoint to create a user
 app.post('/signup', async (req, res) => {
   const { username, password } = req.body;
 

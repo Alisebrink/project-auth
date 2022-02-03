@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import user from '../reducers/user';
 
 import Collection from './Collection';
+import { FormButton } from './elements/form';
+import { FilterSearchAndAddGame, Logout, MainWindow, TopTextBox } from './elements/general-styling';
 import Games from './Games';
 
 const Content = () => {
   const accessToken = useSelector((store) => store.user.accessToken);
-  const username = useSelector((store) => store.user.username);
 
   const [addNewGame, setAddNewGame] = useState('true');
 
@@ -32,19 +33,21 @@ const Content = () => {
   }, [accessToken, navigate]);
 
   return (
-    <main>
-      <h1>Welcome {username}!</h1>
-      <h2>You are now logged in.</h2>
+    <MainWindow>
+      <TopTextBox>
+        <h1>Your Collection!</h1>
+        <Logout onClick={logout}>Log out</Logout>
+      </TopTextBox>
+      <FilterSearchAndAddGame>
+        {addNewGame === 'false' ? (
+          <Collection />
+        ) : (
+          <FormButton onClick={() => setAddNewGame('false')}>Add new game</FormButton>
+        )}
+      </FilterSearchAndAddGame>
 
-      {addNewGame === 'false' ? (
-        <Collection />
-      ) : (
-        <button onClick={() => setAddNewGame('false')}>Add new game</button>
-      )}
-      <p>Here's your collection:</p>
       <Games />
-      <button onClick={logout}>Log out</button>
-    </main>
+    </MainWindow>
   );
 };
 

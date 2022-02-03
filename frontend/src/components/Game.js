@@ -4,6 +4,11 @@ import { API_URL } from 'utils/urls';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, batch } from 'react-redux';
 import collection from '../reducers/collection';
+import { Logout, MainWindow, TopTextBox } from './elements/general-styling';
+import { Form, FormLabel, FormInput, FormButton } from './elements/form';
+import user from '../reducers/user';
+
+import gloomhaven from '../assets/gloomhaven.png';
 
 const Game = () => {
   const [oneGame, setOneGame] = useState();
@@ -99,8 +104,21 @@ const Game = () => {
       });
   };
 
+  const logout = () => {
+    batch(() => {
+      dispatch(user.actions.setUsername(null));
+      dispatch(user.actions.setAccessToken(null));
+      navigate('/');
+      console.log('User sucessfully logged out');
+    });
+  };
+
   return (
-    <main>
+    <MainWindow>
+      <TopTextBox>
+        <h1>{oneGame?.game?.name}</h1>
+        <Logout onClick={logout}>Log out</Logout>
+      </TopTextBox>
       {editGame === 'false' ? (
         <div>
           {oneGame === undefined ? (
@@ -110,15 +128,16 @@ const Game = () => {
             </div>
           ) : (
             <div>
+              <img src={gloomhaven} alt={gloomhaven} />
               <h2>{oneGame?.game?.name}</h2>
               <p>Genre: {oneGame?.game?.genre}</p>
               <p>Type of game:{oneGame?.game?.typeOfGame}</p>
               <p>Number of players: {oneGame?.game?.numberOfPlayers}</p>
               <p>For ages: {oneGame?.game?.forAge} +</p>
               <p>Estimated playtime: {oneGame?.game?.gameTime} minutes</p>
-              <button onClick={deleteGame}>Delete this object</button>
-              <button onClick={() => setEditGame('true')}>Edit this game</button>
-              <button onClick={() => navigate('/')}>Go back</button>
+              <FormButton onClick={deleteGame}>Delete</FormButton>
+              <FormButton onClick={() => setEditGame('true')}>Edit</FormButton>
+              <FormButton onClick={() => navigate('/')}>Go back</FormButton>
             </div>
           )}
         </div>
@@ -132,27 +151,27 @@ const Game = () => {
             <p>For ages: {oneGame?.game?.forAge} +</p>
             <p>Estimated playtime: {oneGame?.game?.gameTime} minutes</p>
           </div>
-          <form onSubmit={updateGame}>
-            <label htmlFor="gamename" placeholder={name}>
+          <Form onSubmit={updateGame}>
+            <FormLabel htmlFor="gamename" placeholder={name}>
               Game name:{' '}
-            </label>
-            <input
+            </FormLabel>
+            <FormInput
               id="gamename"
               name="gamename"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <label htmlFor="genre">Genre of game:</label>
+            <FormLabel htmlFor="genre">Genre of game:</FormLabel>
             <select id="genre" name="genre" onChange={(e) => setGenre(e.target.value)}>
               <option disable="true">Choose genre</option>
               <option value="Party game">Party game</option>
               <option value="Family game">Family game</option>
               <option value="Strategy">Strategy</option>
-              <option value="Strategy">Cooperative strategy</option>
+              <option value="Cooperative strategy">Cooperative strategy</option>
             </select>
 
-            <label htmlFor="typeofgame">Type of game: </label>
+            <FormLabel htmlFor="typeofgame">Type of game: </FormLabel>
             <select
               id="typeofgame"
               name="typeofgame"
@@ -176,38 +195,38 @@ const Game = () => {
               <option value="Worker placement">Worker placement</option>
               <option value="Wargame">Wargame</option>
             </select>
-            <label htmlFor="forage">For ages {forAge} and up:</label>
-            <input
+            <FormLabel htmlFor="forage">For ages {forAge} and up:</FormLabel>
+            <FormInput
               id="forage"
               name="forage"
               type="number"
               value={forAge}
               onChange={(e) => setForAge(e.target.value)}
             />
-            <label htmlFor="gametime">Estimated gametime:</label>
-            <input
+            <FormLabel htmlFor="gametime">Estimated gametime:</FormLabel>
+            <FormInput
               id="gametime"
               name="gametime"
               type="number"
               value={gameTime}
               onChange={(e) => setGameTime(e.target.value)}
             />
-            <label htmlFor="numberofplayers">Number of players:</label>
-            <input
+            <FormLabel htmlFor="numberofplayers">Number of players:</FormLabel>
+            <FormInput
               id="numberofplayers"
               name="numberofplayers"
               type="text"
               value={numberOfPlayers}
               onChange={(e) => setNumberOfPlayers(e.target.value)}
             />
-            <button onClick={() => setEditGame('true')} type="submit">
-              Edit game
-            </button>
-            <button onClick={() => navigate(`/game/${id}`)}>Go back</button>
-          </form>
+            <FormButton onClick={() => setEditGame('true')} type="submit">
+              Update game
+            </FormButton>
+            <FormButton onClick={() => navigate(`/game/${id}`)}>Go back</FormButton>
+          </Form>
         </>
       )}
-    </main>
+    </MainWindow>
   );
 };
 

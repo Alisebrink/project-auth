@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../utils/urls';
 import user from '../reducers/user';
 
+import { Form, FormLabel, FormInput, FormButton } from './elements/form'
+import { MainWindow, TopTextBox, Warning, TextLink } from './elements/general-styling';
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -53,63 +56,78 @@ const Login = () => {
   };
 
   return (
-    <main>
-      {mode === 'signup' ? <h1>Create a user here!</h1> : <h1>Log in with your user here!</h1>}
-      <div className="choose-type">
-        <div className="signup">
-          <input
-            id="signup"
-            type="radio"
-            checked={mode === 'signup'}
-            onChange={() => setMode('signup')}
-          />
-          <label htmlFor="signup">Create a user</label>
-        </div>
+    <MainWindow>
+      <TopTextBox>{mode === 'signin' ? <h1>Login</h1> : <h1>Create user</h1>}</TopTextBox>
+      {mode === 'signup' ? (
+        <div>
+          <Form onSubmit={onFormSubmit}>
+            <FormLabel htmlFor="username">Username</FormLabel>
+            <FormInput
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <FormLabel htmlFor="password">
+              Password {errors && <Warning>Please enter a password!</Warning>}
+            </FormLabel>
+            <FormInput
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <FormButton disabled={username.length < 5} className="login" type="submit">
+              Create user
+            </FormButton>
 
-        <div className="signin">
-          <input
-            id="signin"
-            type="radio"
-            checked={mode === 'signin'}
-            onChange={() => setMode('signin')}
-          />
-          <label htmlFor="signin">I want to sign in</label>
-        </div>
-      </div>
+            {username.length < 5 ? (
+              <Warning>Your username needs to be longer than 5 characters!</Warning>
+            ) : (
+              <p></p>
+            )}
+          </Form>
 
-      <form onSubmit={onFormSubmit}>
-        <label htmlFor="username">Username: </label>
-        <input
-          id="username"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <label htmlFor="password">
-          Password: {errors && <p className="warning-login">Please enter a password!</p>}
-        </label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {mode === 'signup' ? (
-          <button disabled={username.length < 5} className="login" type="submit">
-            Create user
-          </button>
-        ) : (
-          <button disabled={username.length < 5} className="login" type="submit">
-            Login
-          </button>
-        )}
-        {username.length < 5 ? (
-          <p className="warning">Your username needs to be longer than 5 characters!</p>
-        ) : (
-          <p></p>
-        )}
-      </form>
-    </main>
+          <p>
+            Already have a user?&nbsp;
+            <TextLink onClick={() => setMode('signin')}>Login here</TextLink>
+          </p>
+        </div>
+      ) : (
+        <div>
+          <Form onSubmit={onFormSubmit}>
+            <FormLabel htmlFor="username">Username</FormLabel>
+            <FormInput
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <FormLabel htmlFor="password">
+              Password {errors && <Warning>Please enter a password!</Warning>}
+            </FormLabel>
+            <FormInput
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <FormButton disabled={username.length < 5} className="login" type="submit">
+              Login
+            </FormButton>
+            {username.length < 5 ? (
+              <Warning>Your username needs to be longer than 5 characters!</Warning>
+            ) : (
+              <p></p>
+            )}
+          </Form>
+          <p>
+            Don't have a user?&nbsp;
+            <TextLink onClick={() => setMode('signup')}>Create one here</TextLink>
+          </p>
+        </div>
+      )}
+    </MainWindow>
   );
 };
 
