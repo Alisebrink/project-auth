@@ -7,6 +7,34 @@ import bcrypt from 'bcrypt';
 import User from './models/user.model';
 import UserCollection from './models/collection.model';
 import Role from './models/roles.model';
+import Image from './models/image.model';
+
+// Importing .env with secrets
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+// Imports for image upload
+import cloudinaryFramework from 'cloudinary';
+import multer from 'multer';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+
+const cloudinary = cloudinaryFramework.v2;
+cloudinary.config({
+  cloud_name: 'lifin4lproj3ct', // this needs to be whatever you get from cloudinary
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'games',
+    allowedFormats: ['jpg', 'png', 'jpeg'],
+    transformation: [{ width: 500, height: 500, crop: 'limit' }],
+  },
+});
+const parser = multer({ storage });
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/alisebrinkFinalProject';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -64,7 +92,7 @@ app.get('/game/:id', authenticateUser, async (req, res) => {
 
 // Create a game to your collection
 app.post('/game', authenticateUser, async (req, res) => {
-  const { genre, name, typeOfGame, numberOfPlayers, gameTime, forAge } = req.body;
+  const { genre, name, typeOfGame, numberOfPlayers, gameTime, forAge, image } = req.body;
 
   try {
     const newGame = await new UserCollection({
@@ -76,6 +104,7 @@ app.post('/game', authenticateUser, async (req, res) => {
         numberOfPlayers,
         gameTime,
         forAge,
+        image: image._id,
       },
     }).save();
     console.log(`You've added a boardgame to your collection`);
@@ -135,27 +164,27 @@ app.patch('/game/:id', authenticateUser, async (req, res) => {
 });
 
 // endpoint to be able to search the database by name on boardgames
-app.get('/game/search/:id', authenticateUser, async (req, res) => {
-  const { name } = req.query;
-  try {
-    const foundGames = await UserCollection.find({
-      name: RegExp(name, 'i'),
-    });
-    if (foundGames.length >= 1) {
-      res.status(201).json({
-        response: foundGames,
-        success: true,
-      });
-    } else {
-      res.status(404).json({
-        response: 'No games found',
-        success: false,
-      });
-    }
-  } catch (error) {
-    res.status(400).json({ response: error, success: false });
-  }
-});
+// app.get('/game/search/:id', authenticateUser, async (req, res) => {
+//   const { name } = req.query;
+//   try {
+//     const foundGames = await UserCollection.find({
+//       name: RegExp(name, 'i'),
+//     });
+//     if (foundGames.length >= 1) {
+//       res.status(201).json({
+//         response: foundGames,
+//         success: true,
+//       });
+//     } else {
+//       res.status(404).json({
+//         response: 'No games found',
+//         success: false,
+//       });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ response: error, success: false });
+//   }
+// });
 
 // endpoint to create a user
 app.post('/signup', async (req, res) => {
@@ -216,6 +245,21 @@ app.post('/signin', async (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false });
     console.log('Error trying to log in');
+  }
+});
+
+// Endpoint for the user to be able to add images
+app.post('/game/:id/image', parser.single('image'), async (req, res) => {
+  const { id } = req.params;
+  try {
+    const uploadedImage = await new Image({
+      imageUrl: req.file.path,
+      gameId: id,
+    }).save();
+    res.json(uploadedImage);
+    res.status(204).json({ response: uploadedImage, sucess: true });
+  } catch (error) {
+    res.status(400).json({ response: error, success: false });
   }
 });
 

@@ -9,6 +9,8 @@ import { EditForm, FormLabel, FormInput, FormButton, FormSelect } from './elemen
 import { ShowOneGame, OneGameText } from './elements/games';
 import user from '../reducers/user';
 
+import swal from 'sweetalert';
+
 import gloomhaven from '../assets/gloomhaven.png';
 
 const Game = () => {
@@ -52,23 +54,33 @@ const Game = () => {
   }, [accessToken, id]);
 
   const deleteGame = () => {
-    if (window.confirm('Do you really want to delete this game?')) {
-      console.log(`You've deleted this game from the database`);
-      const options = {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          accessToken: accessToken,
-        },
-      };
-      if (accessToken) {
-        fetch(API_URL(`game/${id}`), options).then(navigate('/'));
+    swal({
+      title: 'Are you sure?',
+      text: 'Do you really want to delete this game from your collection?',
+      icon: 'warning',
+      buttons: {
+        confirm: { text: 'Yes', result: true, closeModal: true, value: true, visible: true },
+        cancel: { text: 'Cancel', result: false, closeModal: true, value: null, visible: true },
+      },
+    }).then((result) => {
+      if (result) {
+        swal(`Poof! You've deleted your game!`, { icon: 'success' });
+        console.log(`You've deleted this game from the database`);
+        const options = {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            accessToken: accessToken,
+          },
+        };
+        if (accessToken) {
+          fetch(API_URL(`game/${id}`), options).then(navigate('/'));
+        }
+      } else {
+        console.log(`You've chosen not to delete this object`);
       }
-    } else {
-      console.log(`You've chosen not to delete this object`);
-    }
+    });
   };
-
   const updateGame = () => {
     const options = {
       method: 'PATCH',
@@ -133,12 +145,14 @@ const Game = () => {
               <OneGameText>
                 <h2>{oneGame?.game?.name}</h2>
                 <p>Genre: {oneGame?.game?.genre}</p>
-                <p>Type of game:{oneGame?.game?.typeOfGame}</p>
+                <p>Type of game: {oneGame?.game?.typeOfGame}</p>
                 <p>Number of players: {oneGame?.game?.numberOfPlayers}</p>
                 <p>For ages: {oneGame?.game?.forAge} +</p>
                 <p>Estimated playtime: {oneGame?.game?.gameTime} minutes</p>
                 <div>
-                  <FormButton className="no-margin-left" onClick={deleteGame}>Delete</FormButton>
+                  <FormButton className="no-margin-left" onClick={deleteGame}>
+                    Delete
+                  </FormButton>
                   <FormButton onClick={() => setEditGame('true')}>Edit</FormButton>
                   <FormButton onClick={() => navigate('/')}>Go back</FormButton>
                 </div>
@@ -219,7 +233,11 @@ const Game = () => {
                 onChange={(e) => setNumberOfPlayers(e.target.value)}
               />
               <div>
-                <FormButton className="no-margin-left" onClick={() => setEditGame('true')} type="submit">
+                <FormButton
+                  className="no-margin-left"
+                  onClick={() => setEditGame('true')}
+                  type="submit"
+                >
                   Update game
                 </FormButton>
                 <FormButton onClick={() => navigate(`/game/${id}`)}>Go back</FormButton>

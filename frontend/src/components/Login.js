@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../utils/urls';
 import user from '../reducers/user';
 
-import { LoginForm, FormLabel, FormInput, FormButton } from './elements/form'
-import { MainWindow, TopTextBox, Warning, TextLink } from './elements/general-styling';
+import { LoginForm, FormLabel, FormInput, FormButton } from './elements/form';
+import { MainWindow, TopTextBox, TextLink } from './elements/general-styling';
+
+import swal from 'sweetalert';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -17,7 +19,6 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const errors = useSelector((store) => store.user.error);
 
   useEffect(() => {
     if (accessToken) {
@@ -27,7 +28,6 @@ const Login = () => {
 
   const onFormSubmit = (event) => {
     event.preventDefault();
-
     const options = {
       method: 'POST',
       headers: {
@@ -46,6 +46,11 @@ const Login = () => {
             dispatch(user.actions.setAccessToken(data.response.accessToken));
             dispatch(user.actions.setError(null));
           });
+          if (mode === 'signin') {
+            swal(`You've sucessfully logged in!`, { icon: 'success', button: 'Ok' });
+          } else if (mode === 'signup') {
+            swal(`You've created your user ${username}!`, { icon: 'success', button: 'Ok' });
+          }
         } else {
           dispatch(user.actions.setUserId(null));
           dispatch(user.actions.setUsername(null));
@@ -61,16 +66,14 @@ const Login = () => {
       {mode === 'signup' ? (
         <div>
           <LoginForm onSubmit={onFormSubmit}>
-            <FormLabel htmlFor="username">Username</FormLabel>
+            <FormLabel htmlFor="username">Create username</FormLabel>
             <FormInput
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <FormLabel htmlFor="password">
-              Password {errors && <Warning>Please enter a password!</Warning>}
-            </FormLabel>
+            <FormLabel htmlFor="password">Create password</FormLabel>
             <FormInput
               id="password"
               type="password"
@@ -80,12 +83,6 @@ const Login = () => {
             <FormButton disabled={username.length < 5} className="login" type="submit">
               Create user
             </FormButton>
-
-            {username.length < 5 ? (
-              <Warning>Your username needs to be longer than 5 characters!</Warning>
-            ) : (
-              <p></p>
-            )}
           </LoginForm>
 
           <p>
@@ -97,17 +94,13 @@ const Login = () => {
         <div>
           <LoginForm onSubmit={onFormSubmit}>
             <FormLabel htmlFor="username">Username</FormLabel>
-            <p>{errors && <Warning>Please enter a username!</Warning>}</p>
             <FormInput
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <FormLabel htmlFor="password">
-              Password 
-            </FormLabel>
-            <p>{errors && <Warning>Please enter a password!</Warning>}</p>
+            <FormLabel htmlFor="password">Password</FormLabel>
             <FormInput
               id="password"
               type="password"
@@ -117,11 +110,6 @@ const Login = () => {
             <FormButton disabled={username.length < 5} className="login" type="submit">
               Login
             </FormButton>
-            {username.length < 5 ? (
-              <Warning>Your username needs to be longer than 5 characters!</Warning>
-            ) : (
-              <p></p>
-            )}
           </LoginForm>
           <p>
             Don't have a user?&nbsp;

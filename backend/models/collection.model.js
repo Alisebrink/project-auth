@@ -23,7 +23,12 @@ const UserCollection = mongoose.Schema({
       },
       gameTime: {
         type:String,
-      }}
+      },
+      image: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'ImageCollection',
+      }
+    }
     },
 )
 const Collection = mongoose.model('UserCollection', UserCollection);

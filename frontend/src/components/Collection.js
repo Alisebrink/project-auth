@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch, batch, useSelector } from 'react-redux';
 
 import { API_URL } from '../utils/urls';
@@ -13,19 +13,33 @@ const Collection = ({ setAddNewGame }) => {
   const [gameTime, setGameTime] = useState('0');
   const [numberOfPlayers, setNumberOfPlayers] = useState('');
 
+  const fileInput = useRef();
+
   const accessToken = useSelector((store) => store.user.accessToken);
 
   const dispatch = useDispatch();
   // const errors = useSelector((store) => store.user.error);
 
   const onFormSubmit = () => {
+    
+    const formData = new FormData();
+    const image = formData.append('image', fileInput.current.files[0]);
+
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         accessToken: accessToken,
       },
-      body: JSON.stringify({ genre, name, typeOfGame, gameTime, numberOfPlayers, forAge }),
+      body: JSON.stringify({
+        genre,
+        name,
+        typeOfGame,
+        gameTime,
+        numberOfPlayers,
+        forAge,
+        image,
+      }),
     };
 
     fetch(API_URL('game'), options)
@@ -39,6 +53,7 @@ const Collection = ({ setAddNewGame }) => {
             dispatch(collection.actions.setForAge(data.response.forAge));
             dispatch(collection.actions.setNumberOfPlayers(data.response.numberOfPlayers));
             dispatch(collection.actions.setGameTime(data.response.gameTime));
+            dispatch(collection.actions.setImage(data.response.image))
             dispatch(collection.actions.setError(null));
           });
         } else {
@@ -48,6 +63,7 @@ const Collection = ({ setAddNewGame }) => {
           dispatch(collection.actions.setForAge(null));
           dispatch(collection.actions.setNumberOfPlayers(null));
           dispatch(collection.actions.setGameTime(null));
+          dispatch(collection.actions.setImage(null))
           dispatch(collection.actions.setError(data.response));
         }
       });
@@ -74,7 +90,11 @@ const Collection = ({ setAddNewGame }) => {
         </FormSelect>
 
         <FormLabel htmlFor="typeofgame">Type of game</FormLabel>
-        <FormSelect id="typeofgame" name="typeofgame" onChange={(e) => setTypeOfGame(e.target.value)}>
+        <FormSelect
+          id="typeofgame"
+          name="typeofgame"
+          onChange={(e) => setTypeOfGame(e.target.value)}
+        >
           <option disable="true">Select type</option>
           <option value="Abstract">Abstract</option>
           <option value="Area control">Area control</option>
@@ -117,13 +137,18 @@ const Collection = ({ setAddNewGame }) => {
           value={numberOfPlayers}
           onChange={(e) => setNumberOfPlayers(e.target.value)}
         />
-        <div><FormButton className="no-margin-left" onClick={() => setAddNewGame('false')} type="submit">
-          Add game
-        </FormButton>
-        <FormButton onClick={() => setAddNewGame('false')}>
-          Go back
-        </FormButton></div>
-        
+        <FormLabel htmlFor="addimage">Add image</FormLabel>
+        <FormInput id="addimage" type="file" ref={fileInput} />
+        <div>
+          <FormButton
+            className="no-margin-left"
+            onClick={() => setAddNewGame('false')}
+            type="submit"
+          >
+            Add game
+          </FormButton>
+          <FormButton onClick={() => setAddNewGame('false')}>Go back</FormButton>
+        </div>
       </AddNewForm>
     </div>
   );

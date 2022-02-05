@@ -12,8 +12,8 @@ export const MainWindow = styled.div`
 export const Warning = styled.p`
   color: red;
   font-size: 12px;
+  margin:2px;
   font-style: italic;
-  margin:10px 0px;
 `;
 
 export const TopTextBox = styled.div`

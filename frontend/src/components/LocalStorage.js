@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 import user from 'reducers/user';
 
 const LocalStorage = () => {
+  
   const dispatch = useDispatch();
-
   const accessToken = localStorage.getItem('accessToken');
 
   if (accessToken) {
