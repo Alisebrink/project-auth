@@ -5,15 +5,29 @@ const user = createSlice({
   initialState: {
     userId: null,
     username: null,
+    firstname: null,
+    lastname: null,
+    email: null,
     accessToken: null,
     error: null,
   },
   reducers: {
     setUserId: (store, action) => {
       store.userId = action.payload;
+      localStorage.setItem('userId', store.userId)
     },
     setUsername: (store, action) => {
       store.username = action.payload;
+      localStorage.setItem('username', store.username)
+    },
+    setFirstname: (store, action) => {
+      store.firstname = action.payload;
+    },
+    setLastname: (store, action) => {
+      store.lastname = action.payload;
+    },
+    setEmail: (store, action) => {
+      store.email = action.payload;
     },
     setAccessToken: (store, action) => {
       store.accessToken = action.payload;

@@ -9,7 +9,7 @@ const boardgame = createSlice({
     numberOfPlayers: null,
     forAge: null,
     gameTime: null,
-    image:null,
+    image: null,
   },
   reducers: {
     setGenre: (store, action) => {
@@ -31,7 +31,7 @@ const boardgame = createSlice({
       store.gameTime = action.payload;
     },
     setImage: (store, action) => {
-      store.setImage = action.payload;
+      store.image = action.payload;
     },
     setError: (store, action) => {
       store.errors = action.payload;

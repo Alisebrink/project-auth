@@ -1,37 +1,74 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 
 * {
-    margin:0;
-    padding:0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Lato', sans-serif;
-    position: relative;
-    min-height: 100vh;
-    width:100%;
-    background:#EFEBDD;
+  font-family: 'Lato', sans-serif;
+  min-height: 100vh;
+  width: 100%;
+  background: #efebdd;
 }
 
 #root {
-    display:flex;
-    min-height:100vh;
+  min-height: 100vh;
+  position: relative;
 }
 
 .color {
-    color:#b87373;
+  color: #b87373;
 }
 
 img {
-    width:100%;
+  width: 100%;
 }
 
-.no-margin-left {
-    margin-left:0 !important;
+.gradient {
+  background: rgb(220, 53, 69);
+  background: linear-gradient(157deg, rgba(220, 53, 69, 1) 0%, rgba(253, 126, 20, 1) 100%);
 }
 
+.orange {
+  background: #fd7e14;
+  color: white;
+}
 
-.login {
-    margin:0 !important;
+.orange:hover {
+  background: #d66c14;
+  color: white;
+}
+
+.max-height {
+  min-height: 80vh;
+  height:86vh;
+}
+
+@media only screen and (min-width: 599px) {
+  .max-height {
+    min-height: 60vh;
+  }
+}
+
+.link-danger {
+  cursor: pointer;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 60px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.logo {
+  width: 30px;
 }

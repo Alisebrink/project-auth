@@ -30,8 +30,8 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'games',
-    allowedFormats: ['jpg', 'png', 'jpeg'],
-    transformation: [{ width: 500, height: 500, crop: 'limit' }],
+    allowedFormats: ['jpg', 'png', 'JPG', 'jpeg', 'webp'],
+    transformation: [{ width: 600, height: 400, crop: 'fill' }],
   },
 });
 const parser = multer({ storage });
@@ -77,37 +77,51 @@ app.get('/', (req, res) => {
 
 // gets all games for the current user
 app.get('/game', authenticateUser, async (req, res) => {
-  const games = await UserCollection.find({ userId: req.userId }).exec();
   // Borde hämta alla brädspel efter current userId
+  const games = await UserCollection.find({ userId: req.userId }).populate('image').exec();
 
   res.json(games.map((e) => e));
 });
 
 // Gets one boardgame
 app.get('/game/:id', authenticateUser, async (req, res) => {
-  const game = await UserCollection.findOne({ userId: req.userId, _id: req.params.id }).exec();
+  const game = await UserCollection.findOne({ userId: req.userId, _id: req.params.id })
+    .populate('image')
+    .exec();
 
   res.json(game);
 });
 
 // Create a game to your collection
-app.post('/game', authenticateUser, async (req, res) => {
-  const { genre, name, typeOfGame, numberOfPlayers, gameTime, forAge, image } = req.body;
-
+app.post('/game', authenticateUser, parser.single('image'), async (req, res) => {
+  const { genre, name, typeOfGame, numberOfPlayers, gameTime, forAge } = req.body;
   try {
+    // Create a new game
     const newGame = await new UserCollection({
       userId: req.userId,
       game: {
-        genre,
         name,
+        genre,
         typeOfGame,
         numberOfPlayers,
         gameTime,
         forAge,
-        image: image._id,
       },
     }).save();
-    console.log(`You've added a boardgame to your collection`);
+
+    // if there is a image provided create a new image in the DB
+    if (req.file.path) {
+      const uploadedImage = await new Image({
+        imageUrl: req.file.path,
+        gameId: newGame._id,
+      }).save();
+      newGame.image = uploadedImage;
+
+      // append the game with the uploaded image
+      await UserCollection.findByIdAndUpdate(newGame._id, {
+        $set: { image: uploadedImage._id },
+      }).exec();
+    }
     // returns json, access token and user id
     res.status(201).json({
       response: newGame,
@@ -121,24 +135,11 @@ app.post('/game', authenticateUser, async (req, res) => {
   }
 });
 
-// Delete one game
-app.delete('/game/:id', authenticateUser, async (req, res) => {
-  try {
-    await UserCollection.deleteOne({ userId: req.userId, _id: req.params.id }).exec();
-    console.log('Successfully deleted one game');
-    res.status(204).send();
-  } catch (error) {
-    res.status(400).json({
-      response: error,
-      success: false,
-    });
-  }
-});
-
 // Update one game
 app.patch('/game/:id', authenticateUser, async (req, res) => {
   const { id } = req.params;
   const game = req.body;
+
   try {
     const updatedGame = await UserCollection.findByIdAndUpdate(
       id,
@@ -163,32 +164,23 @@ app.patch('/game/:id', authenticateUser, async (req, res) => {
   }
 });
 
-// endpoint to be able to search the database by name on boardgames
-// app.get('/game/search/:id', authenticateUser, async (req, res) => {
-//   const { name } = req.query;
-//   try {
-//     const foundGames = await UserCollection.find({
-//       name: RegExp(name, 'i'),
-//     });
-//     if (foundGames.length >= 1) {
-//       res.status(201).json({
-//         response: foundGames,
-//         success: true,
-//       });
-//     } else {
-//       res.status(404).json({
-//         response: 'No games found',
-//         success: false,
-//       });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ response: error, success: false });
-//   }
-// });
+// Delete one game
+app.delete('/game/:id', authenticateUser, async (req, res) => {
+  try {
+    await UserCollection.deleteOne({ userId: req.userId, _id: req.params.id }).exec();
+    console.log('Successfully deleted one game');
+    res.status(204).send();
+  } catch (error) {
+    res.status(400).json({
+      response: error,
+      success: false,
+    });
+  }
+});
 
 // endpoint to create a user
 app.post('/signup', async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, firstname, lastname, email } = req.body;
 
   try {
     const salt = bcrypt.genSaltSync();
@@ -198,6 +190,9 @@ app.post('/signup', async (req, res) => {
     }
     const newUser = await new User({
       username,
+      firstname,
+      lastname,
+      email,
       role: (await Role.findOne({ role: 'User' }).exec())._id,
       password: bcrypt.hashSync(password, salt),
     }).save();
@@ -207,6 +202,9 @@ app.post('/signup', async (req, res) => {
       response: {
         userId: newUser._id,
         username: newUser.username,
+        firstname: newUser.firstname,
+        lastname: newUser.lastname,
+        email: newUser.email,
         accessToken: newUser.accessToken,
       },
       success: true,
@@ -216,6 +214,18 @@ app.post('/signup', async (req, res) => {
       response: error,
       success: false,
     });
+  }
+});
+
+// Gets one user for a profile page
+app.get('/user/:userId', authenticateUser, async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.findById(userId).exec();
+
+    res.status(200).json({ response: user, success: true });
+  } catch (error) {
+    res.status(404).json({ response: error, success: false });
   }
 });
 
@@ -245,21 +255,6 @@ app.post('/signin', async (req, res) => {
   } catch (error) {
     res.status(400).json({ response: error, success: false });
     console.log('Error trying to log in');
-  }
-});
-
-// Endpoint for the user to be able to add images
-app.post('/game/:id/image', parser.single('image'), async (req, res) => {
-  const { id } = req.params;
-  try {
-    const uploadedImage = await new Image({
-      imageUrl: req.file.path,
-      gameId: id,
-    }).save();
-    res.json(uploadedImage);
-    res.status(204).json({ response: uploadedImage, sucess: true });
-  } catch (error) {
-    res.status(400).json({ response: error, success: false });
   }
 });
 

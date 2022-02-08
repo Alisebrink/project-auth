@@ -1,21 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const StyledHeader = styled.header`
-  background: #96CEB4;
-  color: white;
-  top: 0;
-  position: fixed;
-  width: 100%;
-  text-align: center;
-  padding: 5px;
-`;
+import dice from '../assets/six_sided_dice_d6.svg';
 
 const Header = () => {
   return (
-    <StyledHeader>
-      Welcome to your board game management system
-    </StyledHeader>
+    <nav className="navbar navbar-dark bg-dark fixed-top">
+      <div className="container-fluid">
+        <a className="navbar-brand" href="/">
+          <img className="d-inline-block align-text-top logo" src={dice} alt="Logo" />
+          &nbsp;&nbsp;&nbsp;Board game management system
+        </a>
+      </div>
+    </nav>
   );
 };
 

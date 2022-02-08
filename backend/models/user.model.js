@@ -11,6 +11,18 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  firstname: {
+    type: String,
+    required: true,
+  },
+  lastname: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
   accessToken: {
     type: String,
     default: () => crypto.randomBytes(128).toString('hex'),
@@ -20,8 +32,8 @@ const UserSchema = mongoose.Schema({
     ref: 'Role',
   },
   userCollection: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'UserCollection',
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserCollection',
   },
 });
 
