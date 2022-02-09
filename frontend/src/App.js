@@ -8,16 +8,13 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import user from './reducers/user';
 
 // Importing components
-import Content from './components/Content';
-import Login from './components/Login';
+import UserCollection from './pages/UserCollection';
+import Login from './pages/Login';
 import NotFound from './components/NotFound';
 import LocalStorage from 'components/LocalStorage';
-import Game from 'components/Game';
-import Profilepage from 'components/Profilepage';
+import SeeOneGame from 'pages/SeeOneGame';
+import Profilepage from 'pages/Profilepage';
 import './main.css';
-
-import Footer from 'components/Footer';
-import Header from 'components/Header';
 
 const reducer = combineReducers({
   user: user.reducer,
@@ -26,25 +23,22 @@ const reducer = combineReducers({
 const store = configureStore({ reducer });
 
 export const App = () => {
-
   return (
     <>
-      <Header />
-      <main className="container p-0 position-absolute top-50 start-50 translate-middle">
+      <main className="container-fluid p-0 position-relative">
         <Provider store={store}>
           <LocalStorage />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Content />}></Route>
+              <Route path="/" element={<UserCollection />}></Route>
               <Route path="/signin" element={<Login />}></Route>
-              <Route path="/game/:id" element={<Game />}></Route>
+              <Route path="/game/:id" element={<SeeOneGame />}></Route>
               <Route path="/user/:userId" element={<Profilepage />}></Route>
               <Route path="*" element={<NotFound />}></Route>
             </Routes>
           </BrowserRouter>
         </Provider>
       </main>
-      <Footer />
     </>
   );
 };

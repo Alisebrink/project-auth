@@ -1,13 +1,14 @@
 import React from 'react';
-import { Navbar } from 'react-bootstrap';
 
 const Footer = () => {
   return (
-    <Navbar bg="dark" fixed="bottom" variant="dark">
-      <Navbar.Brand className="text-center d-block w-100" href="https://linneaisebrink.se">
-        Made by Linnea Isebrink
-      </Navbar.Brand>
-    </Navbar>
+    <footer className="bg-dark dark p-1 fixed-bottom">
+      <div className="container-fluid text-center" href="https://linneaisebrink.se">
+        <a className="link-light" href="https://linneaisebrink.se">
+          Made by Linnea Isebrink
+        </a>
+      </div>
+    </footer>
   );
 };
 

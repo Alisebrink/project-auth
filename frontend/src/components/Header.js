@@ -1,15 +1,51 @@
 import React from 'react';
-import dice from '../assets/six_sided_dice_d6.svg';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, batch, useSelector } from 'react-redux';
+
+import logoutArrow from '../assets/box-arrow-left.svg';
+import profileIcon from '../assets/person-fill.svg';
+import dice from '../assets/white-dice.svg';
+
+import user from '../reducers/user';
 
 const Header = () => {
+  const userId = useSelector((store) => store.user.userId);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    batch(() => {
+      dispatch(user.actions.setUsername(null));
+      dispatch(user.actions.setUserId(null));
+      dispatch(user.actions.setAccessToken(null));
+      navigate('/');
+      console.log('User sucessfully logged out');
+    });
+  };
+
+  const profilePage = () => {
+    navigate(`/user/${userId}`);
+  };
+
   return (
-    <nav className="navbar navbar-dark bg-dark fixed-top">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="/">
-          <img className="d-inline-block align-text-top logo" src={dice} alt="Logo" />
-          &nbsp;&nbsp;&nbsp;Board game management system
-        </a>
+    <nav className="navbar shadow p-2 gradient w-100 container-fluid d-inline-blog align-text-top sticky-top">
+      <div className="d-flex f-direction-row flex-grow-1">
+        <img
+          className="align-text-top logo me-3"
+          src={dice}
+          alt="Logo"
+          onClick={() => navigate('/')}
+        />
+        <p className="m-0 align-self-center light mobile" onClick={() => navigate('/')}>
+          Board game management system
+        </p>
       </div>
+      <button className="btn btn-light me-2" onClick={profilePage}>
+        <img className="icon" src={profileIcon} alt="Log out" />
+      </button>
+      <button className="btn-light btn" onClick={logout}>
+        <img className="icon" src={logoutArrow} alt="Log out" />
+      </button>
     </nav>
   );
 };
