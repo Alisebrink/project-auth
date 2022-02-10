@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
+
 import { API_URL } from 'utils/urls';
+
+// Using swal for the alert
 import swal from 'sweetalert';
 
 const GetOneGame = ({ setLoadingPage, setEditGame }) => {
@@ -32,6 +35,7 @@ const GetOneGame = ({ setLoadingPage, setEditGame }) => {
   }, [accessToken, id, setLoadingPage, setOneGame]);
 
   const deleteGame = () => {
+    // Using swal for the alert
     swal({
       title: 'Are you sure?',
       text: 'Do you really want to delete this game from your collection?',
@@ -43,7 +47,6 @@ const GetOneGame = ({ setLoadingPage, setEditGame }) => {
     }).then((result) => {
       if (result) {
         swal(`Poof! You've deleted your game!`, { icon: 'success' });
-        console.log(`You've deleted this game from the database`);
         const options = {
           method: 'DELETE',
           headers: {
@@ -54,8 +57,6 @@ const GetOneGame = ({ setLoadingPage, setEditGame }) => {
         if (accessToken) {
           fetch(API_URL(`game/${id}`), options).then(navigate('/'));
         }
-      } else {
-        console.log(`You've chosen not to delete this object`);
       }
     });
   };
@@ -67,7 +68,7 @@ const GetOneGame = ({ setLoadingPage, setEditGame }) => {
           <Link to="/">Go back</Link>
         </div>
       ) : (
-        <div className="p-3 p-md-5 mt-3 mt-md-5 shadow white">
+        <div className="p-5 p-md-5 mt-3 mt-md-5 shadow white">
           <div className="row">
             <img
               className="col-12 col-lg-6 p-0"
@@ -77,8 +78,8 @@ const GetOneGame = ({ setLoadingPage, setEditGame }) => {
               }
               alt={oneGame?.image?.imageUrl}
             />
-            <div className="col-12 col-lg-6 mt-3 mt-lg-0 p-md-3 p-1">
-              <h2>{oneGame?.game?.name}</h2>
+            <div className="col-12 col-lg-6 mt-3 mt-lg-0 ps-0 ps-md-5">
+              <h2 className="color">{oneGame?.game?.name}</h2>
               <p>Genre: {oneGame?.game?.genre}</p>
               <p>Type of game: {oneGame?.game?.typeOfGame}</p>
               <p>Number of players: {oneGame?.game?.numberOfPlayers}</p>

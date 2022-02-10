@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import user from 'reducers/user';
 
+// This sets accessToken, userId and username to local storage
 const LocalStorage = () => {
   
   const dispatch = useDispatch();

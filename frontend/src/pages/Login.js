@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+// Imports components into the page
 import Header from '../components/Header';
 import { SignUp } from 'components/SignUp';
 import { SignIn } from 'components/SignIn';
@@ -18,10 +19,12 @@ const Login = ({
   lastname,
   setLastname,
 }) => {
-  const [mode, setMode] = useState('signin');
+  const navigate = useNavigate();
+
   const accessToken = useSelector((store) => store.user.accessToken);
   const userId = useSelector((store) => store.user.userId);
-  const navigate = useNavigate();
+  
+  const [mode, setMode] = useState('signin');
 
   useEffect(() => {
     if (accessToken) {

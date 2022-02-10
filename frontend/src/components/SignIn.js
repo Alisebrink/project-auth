@@ -80,9 +80,9 @@ export const SignIn = ({mode, setMode}) => {
         </form>
         <p>
           Don't have a user?&nbsp;
-          <p className="link-danger" onClick={() => setMode('signup')}>
+          <span className="link-danger" onClick={() => setMode('signup')}>
             Create one here
-          </p>
+          </span>
         </p>
       </div>
     </>

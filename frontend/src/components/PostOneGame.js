@@ -8,8 +8,8 @@ const Collection = ({ setAddNewGame }) => {
   const [genre, setGenre] = useState('');
   const [name, setName] = useState('');
   const [typeOfGame, setTypeOfGame] = useState('');
-  const [forAge, setForAge] = useState('0');
-  const [gameTime, setGameTime] = useState('0');
+  const [forAge, setForAge] = useState('');
+  const [gameTime, setGameTime] = useState('');
   const [numberOfPlayers, setNumberOfPlayers] = useState('');
 
   const accessToken = useSelector((store) => store.user.accessToken);
@@ -18,7 +18,6 @@ const Collection = ({ setAddNewGame }) => {
   const fileInput = useRef();
 
   const onFormSubmit = () => {
-
     const formData = new FormData();
 
     formData.append('name', name);
@@ -61,7 +60,8 @@ const Collection = ({ setAddNewGame }) => {
           dispatch(collection.actions.setGameTime(null));
           dispatch(collection.actions.setError(data.response));
         }
-      });
+      })
+      .finally(() => setAddNewGame(false));
   };
 
   return (
@@ -78,6 +78,7 @@ const Collection = ({ setAddNewGame }) => {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
           />
         </div>
         <div className="row mb-md-3">
@@ -86,14 +87,16 @@ const Collection = ({ setAddNewGame }) => {
               Genre
             </label>
             <select
+              required
               className="form-select mb-2 mb-md-0"
               id="genre"
               name="genre"
               onChange={(e) => setGenre(e.target.value)}
             >
-              <option selected>Choose genre</option>
+              <option disable></option>
               <option value="Party game">Party game</option>
               <option value="Family game">Family game</option>
+              <option value="Card game">Card game</option>
               <option value="Strategy">Strategy</option>
               <option value="Strategy">Cooperative strategy</option>
             </select>
@@ -108,23 +111,17 @@ const Collection = ({ setAddNewGame }) => {
               id="typeofgame"
               name="typeofgame"
               onChange={(e) => setTypeOfGame(e.target.value)}
+              required
             >
-              <option disable="true">Select type</option>
-              <option value="Abstract">Abstract</option>
+              <option disable></option>
               <option value="Area control">Area control</option>
               <option value="Campaign/Legacy">Campaign/Legacy</option>
               <option value="Deckbuilder">Deckbuilder</option>
-              <option value="Deck construction">Deck construction</option>
-              <option value="Dexterity">Dexterity</option>
               <option value="Drafting">Drafting</option>
               <option value="Dungeon crawler">Dungeon crawler</option>
-              <option value="Engine builder">Engine builder</option>
               <option value="Push-your-luck">Push-your-luck</option>
               <option value="Roll-and-move">Roll-and-move</option>
-              <option value="Push-your-write">Push-your-write</option>
-              <option value="Social deduction">Social deduction</option>
               <option value="Storytelling">Storytelling</option>
-              <option value="Worker placement">Worker placement</option>
               <option value="Wargame">Wargame</option>
             </select>
           </div>
@@ -141,6 +138,8 @@ const Collection = ({ setAddNewGame }) => {
               type="number"
               value={forAge}
               onChange={(e) => setForAge(e.target.value)}
+              required
+              min="1"
             />
           </div>
 
@@ -155,6 +154,8 @@ const Collection = ({ setAddNewGame }) => {
               type="number"
               value={gameTime}
               onChange={(e) => setGameTime(e.target.value)}
+              required
+              min="10"
             />
           </div>
 
@@ -169,24 +170,20 @@ const Collection = ({ setAddNewGame }) => {
               type="text"
               value={numberOfPlayers}
               onChange={(e) => setNumberOfPlayers(e.target.value)}
+              required
             />
           </div>
         </div>
         <div className="mb-3">
-          <label className="form-label" htmlFor="addimage">Add image</label>
+          <label className="form-label" htmlFor="addimage">
+            Add image
+          </label>
           <input type="file" className="form-control" id="addimage" ref={fileInput} />
         </div>
 
         <div>
-          <button
-            className="btn btn-success me-2"
-            onClick={() => setAddNewGame('false')}
-            type="submit"
-          >
+          <button className="btn orange me-2 pb-2" type="submit">
             Add game
-          </button>
-          <button className="btn btn-warning" onClick={() => setAddNewGame('false')}>
-            Go back
           </button>
         </div>
       </form>

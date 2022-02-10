@@ -10,6 +10,7 @@ import user from '../reducers/user';
 
 const Header = () => {
   const userId = useSelector((store) => store.user.userId);
+  const accessToken = useSelector((store) => store.user.accessToken);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -19,7 +20,6 @@ const Header = () => {
       dispatch(user.actions.setUserId(null));
       dispatch(user.actions.setAccessToken(null));
       navigate('/');
-      console.log('User sucessfully logged out');
     });
   };
 
@@ -40,12 +40,18 @@ const Header = () => {
           Board game management system
         </p>
       </div>
-      <button className="btn btn-light me-2" onClick={profilePage}>
-        <img className="icon" src={profileIcon} alt="Log out" />
-      </button>
-      <button className="btn-light btn" onClick={logout}>
-        <img className="icon" src={logoutArrow} alt="Log out" />
-      </button>
+      {accessToken ? (
+        <>
+          <button className="btn btn-light me-2" onClick={profilePage}>
+            <img className="icon" src={profileIcon} alt="Log out" />
+          </button>
+          <button className="btn-light btn" onClick={logout}>
+            <img className="icon" src={logoutArrow} alt="Log out" />
+          </button>
+        </>
+      ) : (
+        <></>
+      )}
     </nav>
   );
 };

@@ -1,6 +1,6 @@
-import { React, useState, useParams, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import collection from '../reducers/collection';
 
@@ -16,8 +16,8 @@ const PatchOneGame = ({ setLoadingPage, setEditGame }) => {
   const [genre, setGenre] = useState('');
   const [name, setName] = useState('');
   const [typeOfGame, setTypeOfGame] = useState('');
-  const [forAge, setForAge] = useState('0');
-  const [gameTime, setGameTime] = useState('0');
+  const [forAge, setForAge] = useState('');
+  const [gameTime, setGameTime] = useState('');
   const [numberOfPlayers, setNumberOfPlayers] = useState('');
 
   const accessToken = useSelector((store) => store.user.accessToken);
@@ -35,7 +35,14 @@ const PatchOneGame = ({ setLoadingPage, setEditGame }) => {
       fetch(API_URL(`game/${id}`), options)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           setOneGame(data);
+          setName(data.game.name);
+          setGenre(data.game.genre);
+          setTypeOfGame(data.game.typeOfGame);
+          setNumberOfPlayers(data.game.numberOfPlayers);
+          setGameTime(data.game.gameTime);
+          setForAge(data.game.forAge);
         })
         .finally(() => setLoadingPage(false));
     }
@@ -50,9 +57,8 @@ const PatchOneGame = ({ setLoadingPage, setEditGame }) => {
       },
       body: JSON.stringify({ genre, name, typeOfGame, gameTime, numberOfPlayers, forAge }),
     };
-
-    fetch(API_URL(`game/${id}`), options);
-    setLoadingPage(true)
+    setLoadingPage(true);
+    fetch(API_URL(`game/${id}`), options)
       .then((res) => res.json())
       .then((data) => {
         setOneGame(data.response);
@@ -76,10 +82,11 @@ const PatchOneGame = ({ setLoadingPage, setEditGame }) => {
           dispatch(collection.actions.setError(data.response));
         }
       })
+      .then(() => setEditGame(true))
       .finally(() => setLoadingPage(false));
   };
   return (
-    <div className="d-flex flex-wrap p-3">
+    <div className="d-flex flex-wrap p-3 white shadow mt-3 mt-md-5">
       <img
         className="col-12 col-lg-6"
         src={
@@ -90,7 +97,8 @@ const PatchOneGame = ({ setLoadingPage, setEditGame }) => {
       />
       <div className="col-12 col-lg-6 p-1 p-lg-3">
         <form onSubmit={updateGame}>
-        <div className="mb-md-3">
+          <h4 className="color mt-2 mt-lg-0">Edit your game</h4>
+          <div className="mb-md-3">
             <label className="form-label" htmlFor="gamename">
               Name
             </label>
@@ -101,6 +109,7 @@ const PatchOneGame = ({ setLoadingPage, setEditGame }) => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
             />
           </div>
           <div className="row mb-md-3">
@@ -109,47 +118,43 @@ const PatchOneGame = ({ setLoadingPage, setEditGame }) => {
                 Genre
               </label>
               <select
+                required
                 className="form-select mb-2 mb-md-0"
                 id="genre"
                 name="genre"
                 onChange={(e) => setGenre(e.target.value)}
               >
-                <option selected>Choose genre</option>
-                <option value="Party game">Party game</option>
-                <option value="Family game">Family game</option>
-                <option value="Strategy">Strategy</option>
-                <option value="Strategy">Cooperative strategy</option>
-              </select>
-            </div>
+              <option selected>{genre}</option>
+              <option value="Party game">Party game</option>
+              <option value="Family game">Family game</option>
+              <option value="Card game">Card game</option>
+              <option value="Strategy">Strategy</option>
+              <option value="Strategy">Cooperative strategy</option>
+            </select>
+          </div>
 
-            <div className="col-md-6 col-12">
-              <label className="form-label" htmlFor="typeofgame">
-                Type of game
-              </label>
-              <select
-                className="form-select mb-2 mb-md-0"
-                id="typeofgame"
-                name="typeofgame"
-                onChange={(e) => setTypeOfGame(e.target.value)}
-              >
-                <option disable="true">Select type</option>
-                <option value="Abstract">Abstract</option>
-                <option value="Area control">Area control</option>
-                <option value="Campaign/Legacy">Campaign/Legacy</option>
-                <option value="Deckbuilder">Deckbuilder</option>
-                <option value="Deck construction">Deck construction</option>
-                <option value="Dexterity">Dexterity</option>
-                <option value="Drafting">Drafting</option>
-                <option value="Dungeon crawler">Dungeon crawler</option>
-                <option value="Engine builder">Engine builder</option>
-                <option value="Push-your-luck">Push-your-luck</option>
-                <option value="Roll-and-move">Roll-and-move</option>
-                <option value="Push-your-write">Push-your-write</option>
-                <option value="Social deduction">Social deduction</option>
-                <option value="Storytelling">Storytelling</option>
-                <option value="Worker placement">Worker placement</option>
-                <option value="Wargame">Wargame</option>
-              </select>
+          <div className="col-md-6 col-12">
+            <label className="form-label" htmlFor="typeofgame">
+              Type of game
+            </label>
+            <select
+              className="form-select mb-2 mb-md-0"
+              id="typeofgame"
+              name="typeofgame"
+              onChange={(e) => setTypeOfGame(e.target.value)}
+              required
+            >
+              <option selected>{typeOfGame}</option>
+              <option value="Area control">Area control</option>
+              <option value="Campaign/Legacy">Campaign/Legacy</option>
+              <option value="Deckbuilder">Deckbuilder</option>
+              <option value="Drafting">Drafting</option>
+              <option value="Dungeon crawler">Dungeon crawler</option>
+              <option value="Push-your-luck">Push-your-luck</option>
+              <option value="Roll-and-move">Roll-and-move</option>
+              <option value="Storytelling">Storytelling</option>
+              <option value="Wargame">Wargame</option>
+            </select>
             </div>
           </div>
           <div className="row mb-md-3">
@@ -164,6 +169,8 @@ const PatchOneGame = ({ setLoadingPage, setEditGame }) => {
                 type="number"
                 value={forAge}
                 onChange={(e) => setForAge(e.target.value)}
+                required
+                min="1"
               />
             </div>
 
@@ -178,6 +185,8 @@ const PatchOneGame = ({ setLoadingPage, setEditGame }) => {
                 type="number"
                 value={gameTime}
                 onChange={(e) => setGameTime(e.target.value)}
+                required
+                min="10"
               />
             </div>
 
@@ -192,11 +201,12 @@ const PatchOneGame = ({ setLoadingPage, setEditGame }) => {
                 type="text"
                 value={numberOfPlayers}
                 onChange={(e) => setNumberOfPlayers(e.target.value)}
+                required
               />
             </div>
           </div>
           <div>
-            <button className="me-2 btn orange" onClick={() => setEditGame(true)} type="submit">
+            <button className="me-2 btn orange" type="submit">
               Update game
             </button>
             <button className="btn orange" onClick={() => navigate(`/game/${id}`)}>

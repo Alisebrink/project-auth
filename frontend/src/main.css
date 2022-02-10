@@ -10,7 +10,7 @@ body {
   font-family: 'Lato', sans-serif;
   min-height: 100vh;
   width: 100%;
-  background: #F7F6F1;
+  background: #f7f6f1;
 }
 
 #root {
@@ -21,12 +21,12 @@ body {
 }
 
 .color {
-  color: #FF5733;
-  font-weight:700;
+  color: #ff5733;
+  font-weight: 700;
 }
 
 .white {
-  background:#fff;
+  background: #fff;
 }
 
 img {
@@ -34,46 +34,31 @@ img {
 }
 
 .set-height {
-  min-height:100vh;
+  min-height: 100vh;
 }
 
 .gradient {
-  background: #8a2387; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #f27121,
-    #e94057,
-    #8a2387
-  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: rgb(138, 35, 135);
   background: linear-gradient(
-    to right,
-    #f27121,
-    #e94057,
-    #8a2387
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    138deg,
+    rgba(138, 35, 135, 1) 0%,
+    rgba(233, 64, 87, 1) 35%,
+    rgba(242, 113, 33, 1) 100%
+  );
 }
 
-.light {color:white;}
+.light {
+  color: white;
+}
 
 .orange {
-  background: #fd7e14;
+  background: #ff5733;
   color: white;
 }
 
 .orange:hover {
-  background: #d66c14;
+  background: #ff8c74;
   color: white;
-}
-
-.max-height {
-  min-height: 80vh;
-  max-height: 85vh;
-}
-
-@media only screen and (min-width: 599px) {
-  .max-height {
-    min-height: 60vh;
-  }
 }
 
 .link-danger {
@@ -97,24 +82,6 @@ img {
   width: 30px;
 }
 
-@media only screen and (min-width: 599px) {
-  .desktop-fixed-header {
-    display: block;
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-  }
-
-  .desktop-fixed-footer {
-    display: block;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-  }
-}
-
 .icon {
   width: 25px;
 }
@@ -123,5 +90,21 @@ img {
   color: white;
 }
 
-.mobile {display:none}
-@media only screen and (min-width:599px) {.mobile { display:block;}}
+.mobile {
+  display: none;
+}
+@media only screen and (min-width: 599px) {
+  .mobile {
+    display: block;
+  }
+}
+
+.errorpage {
+  font-size: 6rem;
+}
+
+@media only screen and (min-width: 599px) {
+  .errorpage {
+    font-size: 10rem;
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import LoadingItem from '../components/Loading';
 
+// Imports components into the page
+import LoadingItem from '../components/Loading';
 import Header from '../components/Header';
 import PatchOneGame from 'components/PatchOneGame';
 import FetchOneGame from 'components/FetchOneGame';
@@ -52,6 +53,7 @@ const Game = ({
             setLoadingPage={setLoadingPage}
             oneGame={oneGame}
             setOneGame={setOneGame}
+            setEditGame={setEditGame}
           />
         )}
       </div>

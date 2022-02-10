@@ -21,12 +21,15 @@ const UserCollection = mongoose.Schema({
     },
     numberOfPlayers: {
       type: String,
+      required: true,
     },
     forAge: {
       type: String,
+      required: true,
     },
     gameTime: {
       type: String,
+      required: true,
     },
   },
 });

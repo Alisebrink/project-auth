@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { API_URL } from 'utils/urls';
+
 import Header from '../components/Header';
 
 const Profilepage = () => {
@@ -33,15 +34,15 @@ const Profilepage = () => {
   return (
     <main className="rounded set-height">
       <Header />
-      <div className="container p-1 p-md-5 d-flex bg-light shadow mt-2 mt-md-5">
-        <div className="row">
+      <div className="container-fluid container-md p-5 d-flex bg-light shadow mt-2 mt-md-5">
+        <div className="row p-0">
           <img
-            className="col-12 col-md-6"
+            className="col-12 col-sm-6"
             src="https://genslerzudansdentistry.com/wp-content/uploads/2015/11/anonymous-user.png"
             alt="Anonymous"
           />
-          <div className="col-12 col-md-6 p-4 p-md-0 ms-0 ms-md-3">
-            <h3>
+          <div className="col-12 col-sm-6 p-4 p-md-0 ps-0 ps-md-3">
+            <h3 className="color">
               {userInfo?.response?.firstname} {userInfo?.response?.lastname}
             </h3>
             <p>Email: {userInfo?.response?.email}</p>
