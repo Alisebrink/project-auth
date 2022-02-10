@@ -59,7 +59,7 @@ const Games = () => {
               }
               alt="gloomhaven"
             />
-            <Card.Title className="h5 h4-md m-2 m-md-1">{game.game.name}</Card.Title>
+            <Card.Title className="h6 m-2 m-md-1">{game.game.name}</Card.Title>
             <Card.Text className="m-2 m-md-1">{game.game.typeOfGame}</Card.Text>
             <Button className="m-2 m-md-1" variant="dark" onClick={() => navigate(`/game/${game._id}`)}>
               Details

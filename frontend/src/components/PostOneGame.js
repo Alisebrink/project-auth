@@ -65,7 +65,7 @@ const Collection = ({ setAddNewGame }) => {
   };
 
   return (
-    <div className="container">
+    <div className="container mt-3 mt-mb-5 p-0">
       <form onSubmit={onFormSubmit}>
         <div className="mb-md-3">
           <label className="form-label" htmlFor="gamename">

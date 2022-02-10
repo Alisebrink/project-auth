@@ -46,7 +46,7 @@ export const SignIn = ({mode, setMode}) => {
 
   return (
     <>
-      <div className="container col-12 col-md-4 p-3 p-md-5 mt-3 mt-md-5 shadow white">
+      <div className="container col-12 col-md-4 col-xl-3 p-3 p-md-5 mt-3 mt-md-5 shadow white">
         <form onSubmit={onFormSubmit}>
         <h4 className="color">Login</h4>
           <div>
