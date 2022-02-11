@@ -45,8 +45,8 @@ const PatchOneGame = ({ setEditGame, setLoadingPage }) => {
     }
   }, [accessToken, id, setOneGame]);
 
-  const updateGame = () => {
-
+  const updateGame = (e) => {
+    e.preventDefault();
     const options = {
       method: 'PATCH',
       headers: {
@@ -81,7 +81,8 @@ const PatchOneGame = ({ setEditGame, setLoadingPage }) => {
         }
       })
       .then(() => setEditGame(true))
-      .finally(() => setLoadingPage(false))
+      .then(() => setLoadingPage(false))
+      .finally(() => window.location.reload(false));
   };
   return (
     <div className="d-flex flex-wrap p-3 white shadow mt-3 mt-md-5">
