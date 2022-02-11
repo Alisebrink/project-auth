@@ -7,8 +7,14 @@ import dotenv from 'dotenv';
 
 import { authenticateUser, setUser } from './authorization/authenticateUser';
 
-import { createUser, loginUser, getUser } from './endpoints/userEndpoints'
-import { getOneGame, postOneGame, updateOneGame, deleteOneGame, getAllGames} from './endpoints/gameEndpoints'
+import { createUser, loginUser, getUser } from './endpoints/userEndpoints';
+import {
+  getOneGame,
+  postOneGame,
+  updateOneGame,
+  deleteOneGame,
+  getAllGames,
+} from './endpoints/gameEndpoints';
 
 dotenv.config();
 
@@ -52,7 +58,7 @@ app.get('/', (req, res) => {
 /* ----------------- ENDPOINTS FOR BOARDGAMES ----------------- */
 
 app.post('/game', authenticateUser, parser.single('image'), postOneGame); // creates a game
-app.get('/game', authenticateUser, getAllGames);// gets all games for the current user
+app.get('/game', authenticateUser, getAllGames); // gets all games for the current user
 app.get('/game/:id', authenticateUser, getOneGame); // gets one game
 app.patch('/game/:id', authenticateUser, updateOneGame); // updates one game
 app.delete('/game/:id', authenticateUser, deleteOneGame); // deletes one game
@@ -60,9 +66,9 @@ app.delete('/game/:id', authenticateUser, deleteOneGame); // deletes one game
 /* ----------------- ENDPOINTS FOR USER ----------------- */
 
 app.post('/signup', createUser); // endpoint to create a user
-app.post('/signin', loginUser);//Endpoint where the user can login with a created user
+app.post('/signin', loginUser); //Endpoint where the user can login with a created user
 
-app.get('/user/:userId', authenticateUser, getUser);// Gets one user for a profile page
+app.get('/user/:userId', authenticateUser, getUser); // Gets one user for a profile page
 
 // Listens to the localhost port
 app.listen(port, () => {
