@@ -94,7 +94,7 @@ const PatchOneGame = ({ setEditGame, setLoadingPage }) => {
         alt={oneGame?.image?.imageUrl}
       />
       <div className="col-12 col-lg-6 p-1 p-lg-3">
-        <form onSubmit={updateGame}>
+        <form onSubmit={updateGame} method="patch">
           <h4 className="color mt-2 mt-lg-0">Edit your game</h4>
           <div className="mb-md-3">
             <label className="form-label" htmlFor="gamename">
