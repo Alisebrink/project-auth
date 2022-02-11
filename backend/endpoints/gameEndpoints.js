@@ -98,6 +98,5 @@ export const deleteOneGame = async (req, res) => {
 // Gets all games from the users collection
 export const getAllGames = async (req, res) => {
   const games = await UserCollection.find({ userId: req.userId }).populate('image').exec();
-
   res.json(games.map((e) => e));
 };

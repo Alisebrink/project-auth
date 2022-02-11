@@ -4,7 +4,7 @@ import { useDispatch, batch, useSelector } from 'react-redux';
 import { API_URL } from '../utils/urls';
 import collection from '../reducers/collection';
 
-const Collection = ({ setAddNewGame }) => {
+const Collection = ({ setAddNewGame, setLoadingPage }) => {
   const [genre, setGenre] = useState('');
   const [name, setName] = useState('');
   const [typeOfGame, setTypeOfGame] = useState('');
@@ -17,7 +17,8 @@ const Collection = ({ setAddNewGame }) => {
 
   const fileInput = useRef();
 
-  const onFormSubmit = () => {
+  const onFormSubmit = (e) => {
+    e.preventDefault();
     const formData = new FormData();
 
     formData.append('name', name);
@@ -35,7 +36,7 @@ const Collection = ({ setAddNewGame }) => {
       },
       body: formData,
     };
-
+    setLoadingPage(true);
     fetch(API_URL('game/'), options)
       .then((res) => res.json())
       .then((data) => {
@@ -61,7 +62,9 @@ const Collection = ({ setAddNewGame }) => {
           dispatch(collection.actions.setError(data.response));
         }
       })
-      .finally(() => setAddNewGame(false));
+      .then(() => setAddNewGame(false))
+      .then(() => setLoadingPage(false))
+      .finally(() => window.location.reload(false));
   };
 
   return (
@@ -114,12 +117,15 @@ const Collection = ({ setAddNewGame }) => {
               required
             >
               <option disable></option>
+              <option value="Adventure">Adventure</option>
               <option value="Area control">Area control</option>
               <option value="Campaign/Legacy">Campaign/Legacy</option>
+              <option value="City Building">City building</option>
               <option value="Deckbuilder">Deckbuilder</option>
               <option value="Drafting">Drafting</option>
               <option value="Dungeon crawler">Dungeon crawler</option>
               <option value="Push-your-luck">Push-your-luck</option>
+              <option value="Puzzle">Puzzle</option>
               <option value="Roll-and-move">Roll-and-move</option>
               <option value="Storytelling">Storytelling</option>
               <option value="Wargame">Wargame</option>

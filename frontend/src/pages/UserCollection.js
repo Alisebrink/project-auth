@@ -7,14 +7,16 @@ import PostOneGame from '../components/PostOneGame';
 import LoadAllGames from '../components/LoadAllGames';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import LoadingItem from '../components/Loading';
 
-const UserCollection = ({allGames, setAllGames, setLoadingPage}) => {
+const UserCollection = ({ allGames, setAllGames }) => {
   const navigate = useNavigate();
-  
+
   const accessToken = useSelector((store) => store.user.accessToken);
 
   const [addNewGame, setAddNewGame] = useState(false);
-  
+  const [loadingPage, setLoadingPage] = useState(false);
+
   useEffect(() => {
     if (!accessToken) {
       navigate('/signin');
@@ -25,24 +27,34 @@ const UserCollection = ({allGames, setAllGames, setLoadingPage}) => {
     <div className="bg-light set-height">
       <Header />
       <div className="container">
+        {loadingPage && <LoadingItem />}
         {addNewGame === true ? (
           <>
-            <div className="mt-3 mt-md-5 p-0 pb-2">
+            <div className="mt-3 mt-md-3 p-0 pb-2">
               <button className="btn btn-dark" onClick={() => setAddNewGame(false)}>
                 Close
               </button>
             </div>
-            <PostOneGame setLoadingPage={setLoadingPage} setAddNewGame={setAddNewGame} />
+            <PostOneGame
+              loadingPage={loadingPage}
+              setLoadingPage={setLoadingPage}
+              setAddNewGame={setAddNewGame}
+            />
           </>
         ) : (
-          <div className="mt-3 mt-md-5 p-0">
-            <button className="btn btn-dark" onClick={() => setAddNewGame(true)}>
+          <div className="mt-3 mt-md-3 p-0">
+            <button className="btn btn-dark me-2" onClick={() => setAddNewGame(true)}>
               Add new game
             </button>
           </div>
         )}
       </div>
-      <LoadAllGames allGames={allGames} setAllGames={setAllGames} />
+      <LoadAllGames
+        allGames={allGames}
+        setAllGames={setAllGames}
+        loadingPage={loadingPage}
+        setLoadingPage={setLoadingPage}
+      />
       <Footer />
     </div>
   );

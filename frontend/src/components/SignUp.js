@@ -127,9 +127,9 @@ export const SignUp = ({ mode, setMode }) => {
 
         <p>
           Already have a user?&nbsp;
-          <p className="link-danger" onClick={() => setMode('signin')}>
+          <span className="link-danger" onClick={() => setMode('signin')}>
             Login here
-          </p>
+          </span>
         </p>
       </div>
     </>

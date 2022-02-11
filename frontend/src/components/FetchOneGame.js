@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
-
 import { API_URL } from 'utils/urls';
 
 // Using swal for the alert
@@ -44,21 +43,23 @@ const GetOneGame = ({ setLoadingPage, setEditGame }) => {
         confirm: { text: 'Yes', result: true, closeModal: true, value: true, visible: true },
         cancel: { text: 'Cancel', result: false, closeModal: true, value: null, visible: true },
       },
-    }).then((result) => {
-      if (result) {
-        swal(`Poof! You've deleted your game!`, { icon: 'success' });
-        const options = {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            accessToken: accessToken,
-          },
-        };
-        if (accessToken) {
-          fetch(API_URL(`game/${id}`), options).then(navigate('/'));
+    })
+      .then((result) => {
+        if (result) {
+          swal(`Poof! You've deleted your game!`, { icon: 'success' });
+          const options = {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              accessToken: accessToken,
+            },
+          };
+          if (accessToken) {
+            fetch(API_URL(`game/${id}`), options).then(navigate('/'));
+          }
         }
-      }
-    });
+      })
+      .then(() => window.location.reload(false));
   };
   return (
     <>
@@ -68,34 +69,47 @@ const GetOneGame = ({ setLoadingPage, setEditGame }) => {
           <Link to="/">Go back</Link>
         </div>
       ) : (
-        <div className="p-5 p-md-5 mt-3 mt-md-5 shadow white">
-          <div className="row">
-            <img
-              className="col-12 col-lg-6 p-0"
-              src={
-                oneGame?.image?.imageUrl ??
-                'https://media.istockphoto.com/photos/components-of-board-games-on-light-blue-background-flat-lay-space-for-picture-id1317588344?b=1&k=20&m=1317588344&s=170667a&w=0&h=pL4NY2xzoSocpmrk1N4CFWqF9bnIXtMIW96gfZWZDKA='
-              }
-              alt={oneGame?.image?.imageUrl}
-            />
-            <div className="col-12 col-lg-6 mt-3 mt-lg-0 ps-0 ps-md-5">
-              <h2 className="color">{oneGame?.game?.name}</h2>
-              <p>Genre: {oneGame?.game?.genre}</p>
-              <p>Type of game: {oneGame?.game?.typeOfGame}</p>
-              <p>Number of players: {oneGame?.game?.numberOfPlayers}</p>
-              <p>For ages: {oneGame?.game?.forAge} +</p>
-              <p>Estimated playtime: {oneGame?.game?.gameTime} minutes</p>
-              <div>
-                <button className="btn orange me-2" onClick={deleteGame}>
-                  Delete
-                </button>
-                <button className="btn orange me-2" onClick={() => setEditGame('true')}>
-                  Edit
-                </button>
-                <button className="btn orange" onClick={() => navigate('/')}>
-                  Go back
-                </button>
-              </div>
+        <div className="d-flex flex-wrap p-3 white shadow mt-3 mt-md-5">
+          <img
+            className="col-12 col-lg-6"
+            src={
+              oneGame?.image?.imageUrl ??
+              'https://media.istockphoto.com/photos/components-of-board-games-on-light-blue-background-flat-lay-space-for-picture-id1317588344?b=1&k=20&m=1317588344&s=170667a&w=0&h=pL4NY2xzoSocpmrk1N4CFWqF9bnIXtMIW96gfZWZDKA='
+            }
+            alt={oneGame?.image?.imageUrl}
+          />
+          <div className="col-12 col-lg-6 p-1 p-lg-3">
+            <h2 className="color">{oneGame?.game?.name}</h2>
+            <p>
+              <span className="color">Genre: </span>
+              {oneGame?.game?.genre}
+            </p>
+            <p>
+              <span className="color">Type of game: </span>
+              {oneGame?.game?.typeOfGame}
+            </p>
+            <p>
+              <span className="color">For ages: </span>
+              {oneGame?.game?.forAge} +
+            </p>
+            <p>
+              <span className="color">Estimated playtime: </span>
+              {oneGame?.game?.gameTime} minutes
+            </p>
+            <p>
+              <span className="color">Number of players: </span>
+              {oneGame?.game?.numberOfPlayers}
+            </p>
+            <div>
+              <button className="btn orange me-2" onClick={deleteGame}>
+                Delete
+              </button>
+              <button className="btn orange me-2" onClick={() => setEditGame('true')}>
+                Edit
+              </button>
+              <button className="btn orange" onClick={() => navigate('/')}>
+                Go back
+              </button>
             </div>
           </div>
         </div>

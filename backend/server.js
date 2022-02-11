@@ -29,7 +29,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: 'games',
     allowedFormats: ['jpg', 'png', 'JPG', 'jpeg', 'webp'],
-    transformation: [{ width: 600, height: 400, crop: 'fill' }],
+    transformation: [{ width: 600, height: 400, crop: 'fill', gravity: 'north' }],
   },
 });
 const parser = multer({ storage });
@@ -57,7 +57,7 @@ app.get('/game/:id', authenticateUser, getOneGame); // gets one game
 app.patch('/game/:id', authenticateUser, updateOneGame); // updates one game
 app.delete('/game/:id', authenticateUser, deleteOneGame); // deletes one game
 
-/* ----------------- ENDPOINTS FOR BOARDGAMES ----------------- */
+/* ----------------- ENDPOINTS FOR USER ----------------- */
 
 app.post('/signup', createUser); // endpoint to create a user
 app.post('/signin', loginUser);//Endpoint where the user can login with a created user
